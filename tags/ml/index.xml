@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ml on Abnormally distributed</title>
+    <link>/tags/ml/</link>
+    <description>Recent content in Ml on Abnormally distributed</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <managingEditor>jarvm@umich.edu (Jarvis Miller)</managingEditor>
+    <webMaster>jarvm@umich.edu (Jarvis Miller)</webMaster>
+    <lastBuildDate>Sat, 14 Oct 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/ml/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Neural Nets - units and decision boundaries</title>
+      <link>/2017/10/14/neural-nets-pt1/</link>
+      <pubDate>Sat, 14 Oct 2017 00:00:00 +0000</pubDate>
+      <author>jarvm@umich.edu (Jarvis Miller)</author>
+      <guid>/2017/10/14/neural-nets-pt1/</guid>
+      <description>I have an assignment that involves building a language identifier (given text, predict which language is the text from) using Neural Nets. I wanted to use this opportunity to make a few posts to cement the idea into my head. I hope you find this intuitive and helpful.
+So lets talk about NN in terms of classification, when I think of neural networks, I think of applying a multi-layered system to make a decision.</description>
+    </item>
+    
+  </channel>
+</rss>

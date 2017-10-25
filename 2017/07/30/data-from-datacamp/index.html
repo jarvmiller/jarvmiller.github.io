@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>Data from DataCamp</title>
+  <meta property="og:title" content="Data from DataCamp" />
+  <meta name="twitter:title" content="Data from DataCamp" />
+  <meta name="description" content="DataCamp boasts to be “the easiest way to learn Data Science Online” and has courses of different levels taught using R or python. I wanted to see how popular some of the courses were and which technology they used, so a quick use of rvest was required. Rvest is a package developed by Hadley Wickham that allows one to easily scrape web pages. Below is the function used to get the relative links for each course based on the technology used.">
+  <meta property="og:description" content="DataCamp boasts to be “the easiest way to learn Data Science Online” and has courses of different levels taught using R or python. I wanted to see how popular some of the courses were and which technology they used, so a quick use of rvest was required. Rvest is a package developed by Hadley Wickham that allows one to easily scrape web pages. Below is the function used to get the relative links for each course based on the technology used.">
+  <meta name="twitter:description" content="DataCamp boasts to be “the easiest way to learn Data Science Online” and has courses of different levels taught using R or python. I wanted to see how popular some of the courses were and which …">
+  <meta name="author" content="Jarvis Miller"/>
+  <link href='/icon.png' rel='icon' type='image/x-icon'/>
+  <meta property="og:image" content="/icon.png" />
+  <meta name="twitter:image" content="/icon.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@jarvmiller" />
+  <meta name="twitter:creator" content="@jarvmiller" />
+  <meta property="og:url" content="/2017/07/30/data-from-datacamp/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Abnormally distributed" />
+
+  <meta name="generator" content="Hugo 0.30.2" />
+  <link rel="canonical" href="/2017/07/30/data-from-datacamp/" />
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Abnormally distributed">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="/css/pygment_highlights.css" />
+  <link rel="stylesheet" href="/css/highlight.min.css" />
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.css" integrity="sha256-sCl5PUOGMLfFYctzDW3MtRib0ctyUvI9Qsmq2wXOeBY=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/default-skin/default-skin.min.css" integrity="sha256-BFeI1V+Vh1Rk37wswuOYn5lsTcaU96hGaI7OUVCLjPc=" crossorigin="anonymous" />
+
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">Abnormally distributed</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="About" href="/about/">About</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="Tags" href="/tags/">Tags</a>
+            </li>
+          
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    <div class="avatar-container">
+      <div class="avatar-img-border">
+        
+          <a title="Abnormally distributed" href="/">
+            <img class="avatar-img" src="/icon.png" alt="Abnormally distributed" />
+          </a>
+        
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+
+
+    
+  
+  
+  
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="post-heading">
+              <h1>Data from DataCamp</h1>
+                
+                
+                  <span class="post-meta">
+  Posted on July 30, 2017
+  
+</span>
+
+
+                
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <p>DataCamp boasts to be “the easiest way to learn Data Science Online” and has courses of different levels taught using R or python. I wanted to see how popular some of the courses were and which technology they used, so a quick use of rvest was required. Rvest is a package developed by Hadley Wickham that allows one to easily scrape web pages. Below is the function used to get the relative links for each course based on the technology used.</p>
+<pre class="r"><code>get_course_links &lt;- function(technology){
+  url &lt;- paste(&#39;https://www.datacamp.com/courses/tech:&#39;, technology, sep=&#39;&#39;)
+  html &lt;- read_html(url)
+  courses_title &lt;- html_nodes(html, css=&#39;.course-block__link&#39;) %&gt;% 
+    html_attr(&#39;href&#39;)
+  return(courses_title)
+}</code></pre>
+<p>I essentially go to the page, find which parts of the page correspond to the specified css paths, then which parts have the specified ‘href’ attribute i.e. which are links.</p>
+<p>I then wrote another function <em>get_course_data</em>, that uses rvest, dplyr, some stringr with regex, etc. to get information for each course such as the number of participants, title of course, number of pre-requisites, so on and so forth. Below are the five courses using R or Python with the most number of participants. As you can see, there are only two courses under ‘SQL’, as other database courses seem to focus on dplyr (R) or pysqlite (python) and are thus under those categories.</p>
+<pre class="r"><code>courses_all &lt;- read.csv(&quot;dat/all_courses_scrape_df.csv&quot;)
+arranged_courses &lt;- courses_all %&gt;% group_by(tech) %&gt;% 
+  select(title, num_participants, num_prereqs, tech) %&gt;% 
+  arrange(desc(num_participants)) %&gt;% split(., .$tech, drop=T)
+
+arranged_courses$python %&gt;% top_n(5, num_participants)
+## # A tibble: 5 x 4
+## # Groups:   tech [1]
+##                                  title num_participants num_prereqs   tech
+##                                 &lt;fctr&gt;            &lt;int&gt;       &lt;int&gt; &lt;fctr&gt;
+## 1     Intro to Python for Data Science           452593           0 python
+## 2 Intermediate Python for Data Science           127312           1 python
+## 3              Deep Learning in Python            31527           3 python
+## 4 Python Data Science Toolbox (Part 1)            29021           2 python
+## 5    Importing Data in Python (Part 1)            26001           2 python
+arranged_courses$R %&gt;% top_n(5, num_participants)
+## # A tibble: 5 x 4
+## # Groups:   tech [1]
+##                                      title num_participants num_prereqs
+##                                     &lt;fctr&gt;            &lt;int&gt;       &lt;int&gt;
+## 1                        Introduction to R           558270           0
+## 2                           Intermediate R           160942           1
+## 3        Data Manipulation in R with dplyr            55803           2
+## 4         Introduction to Machine Learning            53502           3
+## 5 Data Visualization with ggplot2 (Part 1)            51080           2
+## # ... with 1 more variables: tech &lt;fctr&gt;
+arranged_courses$sql
+## # A tibble: 2 x 4
+## # Groups:   tech [1]
+##                           title num_participants num_prereqs   tech
+##                          &lt;fctr&gt;            &lt;int&gt;       &lt;int&gt; &lt;fctr&gt;
+## 1 Intro to SQL for Data Science            54973           0    sql
+## 2    Joining Data in PostgreSQL             6413           0    sql</code></pre>
+<p>Below are the number of courses w/ prerequisites as well as the number of people who took those courses. It’s nice to see that DataCamp has a number of courses that have 3+ pre-requisites, evidence that their courses build off of one another instead of just stopping at the basics.</p>
+<pre class="r"><code>courses_all %&gt;% group_by(num_prereqs) %&gt;% 
+  summarise(avg_num_participants = mean(num_participants),
+            tot_num_participants = sum(num_participants),
+            n = n())
+## # A tibble: 5 x 4
+##   num_prereqs avg_num_participants tot_num_participants     n
+##         &lt;int&gt;                &lt;dbl&gt;                &lt;int&gt; &lt;int&gt;
+## 1           0            49132.167              1179172    24
+## 2           1            40244.000               402440    10
+## 3           2            15127.909               332814    22
+## 4           3            14061.821               393731    28
+## 5           4             5374.333                16123     3</code></pre>
+<p>I was curious as to the point of XP given per course. I initially thought that “more difficult courses will give more XP per exercise”, and thus did the following:</p>
+<pre class="r"><code>ggplot(courses_all) + geom_point(aes(x=num_exercises, y=num_xp)) + facet_grid(~num_prereqs) + 
+  labs(x=&quot;Number of exercises&quot;, y=&#39;Experience&#39;, title=&#39;Split by number of prerequisites&#39;) + theme(axis.ticks.x=element_blank()) + theme_bw()</code></pre>
+<p><img src="/post/2017-10-20-data-from-datacamp_files/figure-html/xp_plt-1.png" width="672" style="display: block; margin: auto;" /> I assumed that the more difficult courses tend to have more prerequisites, which may not be true as for many users, the first course might have the steepest learning curve and thus be the most difficult for them. But anyway, under my assumption I thought I’d see more experience given for the same number of exercises as the number of prerequistes increase. Not the case. Still not sure of the point of XP given per course haha..</p>
+<p>Now comes the part that I really wish DataCamp gave the age of the course or the day it was released. I wanted to see which technology was ‘more popular’, but of course with the current data I can’t answer that. Anyway, first lets try just looking at the average number of participants by technology.</p>
+<pre class="r"><code>courses_all %&gt;% group_by(tech) %&gt;% 
+  summarise(avg_num_participants=mean(num_participants),
+            avg_num_hours = mean(num_hours),
+            most_popular_course = max(num_participants),
+            total_participants = sum(num_participants),
+            n = n())
+## # A tibble: 3 x 6
+##     tech avg_num_participants avg_num_hours most_popular_course
+##   &lt;fctr&gt;                &lt;dbl&gt;         &lt;dbl&gt;               &lt;dbl&gt;
+## 1 python             32248.73      3.846154              452593
+## 2      R             24142.83      4.169492              558270
+## 3    sql             30693.00      4.500000               54973
+## # ... with 2 more variables: total_participants &lt;int&gt;, n &lt;int&gt;</code></pre>
+<p>There are many more R courses but python courses seems to have the higher average number of participants even though R has the most popular course. Let’s look at a boxplot. It’s zoomed in to stop at the whiskers.</p>
+<pre class="r"><code>ggplot(courses_all, aes(x=tech, y=num_participants)) + geom_boxplot() + 
+  geom_jitter(width=.2) + 
+  coord_cartesian(ylim = quantile(courses_all$num_participants, c(0.1, .95))) +
+  theme_bw()</code></pre>
+<p><img src="/post/2017-10-20-data-from-datacamp_files/figure-html/tech_boxplot-1.png" width="672" style="display: block; margin: auto;" /> Yes, there are a number of R courses that are more popular than Python courses, but there are also many R courses that have very few participants. This is why I wish I could know when each course started. I’m not sure whether these courses were unpopular or whether they’re just new.</p>
+<p>There are plenty other things I can look at, but I’ll stop for now as the post is getting plenty long. If you want the scraped data, you can find the code on my Github!</p>
+
+      </article>
+
+      <ul class="pager blog-pager">
+        
+          <li class="previous">
+            <a href="/2017/06/23/gsoc-iii/" data-toggle="tooltip" data-placement="top" title="GSOC III">&larr; Previous Post</a>
+          </li>
+        
+        
+          <li class="next">
+            <a href="/2017/08/17/exploring-flight-data/" data-toggle="tooltip" data-placement="top" title="Exploring flight data">Next Post &rarr;</a>
+          </li>
+        
+      </ul>
+
+      
+
+    </div>
+  </div>
+</div>
+
+    <footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="mailto:jarvm@umich.edu" title="Email me">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/jarvmiller" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://twitter.com/jarvmiller" title="Twitter">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+            
+              Jarvis Miller
+                      
+          
+          
+          &nbsp;&bull;&nbsp;
+          2017
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="/">Abnormally distributed</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="http://gohugo.io">Hugo v0.30.2</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="/js/main.js"></script>
+<script src="/js/highlight.min.js"></script>
+<script> hljs.initHighlightingOnLoad(); </script>
+<script> renderMathInElement(document.body); </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.js" integrity="sha256-UplRCs9v4KXVJvVY+p+RSo5Q4ilAUXh7kpjyIP5odyc=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe-ui-default.min.js" integrity="sha256-PWHOlUzc96pMc8ThwRIXPn8yH4NOLu42RQ0b9SpnpFk=" crossorigin="anonymous"></script>
+<script src="/js/load-photoswipe.js"></script>
+
+
+
+  </body>
+</html>
+
