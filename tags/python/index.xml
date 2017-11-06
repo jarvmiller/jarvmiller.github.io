@@ -8,10 +8,20 @@
     <language>en-us</language>
     <managingEditor>jarvm@umich.edu (Jarvis Miller)</managingEditor>
     <webMaster>jarvm@umich.edu (Jarvis Miller)</webMaster>
-    <lastBuildDate>Fri, 23 Jun 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 06 Nov 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Understanding OAuth</title>
+      <link>/2017/11/06/understanding-oauth/</link>
+      <pubDate>Mon, 06 Nov 2017 00:00:00 +0000</pubDate>
+      <author>jarvm@umich.edu (Jarvis Miller)</author>
+      <guid>/2017/11/06/understanding-oauth/</guid>
+      <description>I should definitely finish the other parts of the NN posts, but here is a brief detour into OAuth (Open Authorization). Note that I am still a novice and so there might be explanations that are missing information or lacking depth. But this is a way for me to synthesize what I know, so please message me if there are any mistakes!
+So what is the point of OAuth? As I’ve seen it, it’s a way for web services or apps to exchange information without compromising the people using apps.</description>
+    </item>
     
     <item>
       <title>GSOC III</title>
