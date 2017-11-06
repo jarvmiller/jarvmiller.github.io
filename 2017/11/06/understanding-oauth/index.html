@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>Understanding OAuth</title>
+  <meta property="og:title" content="Understanding OAuth" />
+  <meta name="twitter:title" content="Understanding OAuth" />
+  <meta name="description" content="I should definitely finish the other parts of the NN posts, but here is a brief detour into OAuth (Open Authorization). Note that I am still a notice and so there might be explanations that are missing information or lacking depth. But this is a way for me to synthesize what I know, so please message me if there are any mistakes!
+So what is the point of OAuth? As I’ve seen it, it’s a way for web services or apps to exchange information without compromising the people using apps.">
+  <meta property="og:description" content="I should definitely finish the other parts of the NN posts, but here is a brief detour into OAuth (Open Authorization). Note that I am still a notice and so there might be explanations that are missing information or lacking depth. But this is a way for me to synthesize what I know, so please message me if there are any mistakes!
+So what is the point of OAuth? As I’ve seen it, it’s a way for web services or apps to exchange information without compromising the people using apps.">
+  <meta name="twitter:description" content="I should definitely finish the other parts of the NN posts, but here is a brief detour into OAuth (Open Authorization). Note that I am still a notice and so there might be explanations that are …">
+  <meta name="author" content="Jarvis Miller"/>
+  <link href='/icon.png' rel='icon' type='image/x-icon'/>
+  <meta property="og:image" content="/icon.png" />
+  <meta name="twitter:image" content="/icon.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@jarvmiller" />
+  <meta name="twitter:creator" content="@jarvmiller" />
+  <meta property="og:url" content="/2017/11/06/understanding-oauth/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Abnormally distributed" />
+
+  <meta name="generator" content="Hugo 0.30.2" />
+  <link rel="canonical" href="/2017/11/06/understanding-oauth/" />
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Abnormally distributed">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="/css/pygment_highlights.css" />
+  <link rel="stylesheet" href="/css/highlight.min.css" />
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.css" integrity="sha256-sCl5PUOGMLfFYctzDW3MtRib0ctyUvI9Qsmq2wXOeBY=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/default-skin/default-skin.min.css" integrity="sha256-BFeI1V+Vh1Rk37wswuOYn5lsTcaU96hGaI7OUVCLjPc=" crossorigin="anonymous" />
+
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">Abnormally distributed</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="About" href="/about/">About</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="Tags" href="/tags/">Tags</a>
+            </li>
+          
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    <div class="avatar-container">
+      <div class="avatar-img-border">
+        
+          <a title="Abnormally distributed" href="/">
+            <img class="avatar-img" src="/icon.png" alt="Abnormally distributed" />
+          </a>
+        
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+
+
+    
+  
+  
+  
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="post-heading">
+              <h1>Understanding OAuth</h1>
+                
+                
+                  <span class="post-meta">
+  Posted on November 6, 2017
+  
+</span>
+
+
+                
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <p>I should definitely finish the other parts of the NN posts, but here is a brief detour into OAuth (Open Authorization). Note that I am still a notice and so there might be explanations that are missing information or lacking depth. But this is a way for me to synthesize what I know, so please message me if there are any mistakes!</p>
+<p>So what is the point of OAuth? As I’ve seen it, it’s a way for web services or apps to exchange information without compromising the people using apps. For example, one might use Spotify for the first time and notice that it lets you do something like connect your Spotify account with the Spotify account of your Facebook friends. This usually means Spotify also gets access to certain information from your Facebook account that they consider helpful (e.g your friend list). Now, how does Facebook give Spotify certain data without Spotify having access to your username and password? This is where OAuth comes in. OAuth is an authorization protocol – or in other words, a set of rules – that allows a third-party website or application to access a user’s data without the user needing to share login credentials. (from Technopedia)</p>
+<p>Note that there is OAuth1 and OAuth2. OAuth2 is a bit simplified and allows flexibility (for reasons I’m not too sure of yet). This is what I learned so for now on we will focus on OAuth2. This requires three ‘players’ involved</p>
+<ul>
+<li>The Client: The (third party) application that wants access to the user’s data. It needs to get permission from the user first. (e.g. Spotify wants access to FB data)</li>
+<li>The User: The person that wants to utilize an app and give it permission to access their data from another app or web service (e.g. The person that wants to connect Spotify and Facebook)</li>
+<li>The Server: The website/app that has the user’s data (e.g. Facebook)</li>
+</ul>
+<p>Note that for this to even be possible, the Client would have to approach the Server and essentially tell it, “Hey, people will want to use me and connect me to you later. Can you give me personal identification info so that you know it’s me when I come to you in the future on behalf of the people using me?”. Then the client gets something called an <em>Client Key</em> and <em>Client Secret</em>. It will use this in the authencation process. How does this work? We have the following steps</p>
+<ol style="list-style-type: decimal">
+<li>User tells Client (Spotify) to connect to Server (FB)
+<ul>
+<li>This usually looks like clicking on some sort of button that says ‘import contacts’ or something <img src="figs/spotify_invitation.png" alt="Spotify asking if I want to give it my FB data for ease" /></li>
+</ul></li>
+<li>Client (Spotify) directs User to Server (FB)
+<ul>
+<li>Note that the Client also sends a URL that the server sends us back to after we’re done talking to the Server. This is called a <em>redirect url</em>. <img src="figs/spotify_connection.png" alt="Spotify directs me to FB so I can potentially give access" /></li>
+</ul></li>
+<li>User grants Client (Spotify) access
+<ul>
+<li>This might look like a box popping up or that says “Allow xyz app access to your friends list” or “Please log into your account to allow access” and you can click the allow button or log in. <img src="figs/spotify_authorization.png" alt="Me maybe giving Facebook confirmation that it can give Spotify my FB friend list" /></li>
+</ul></li>
+<li>The Server (Facebook) sends the User back to the Client (Spotify) along with a authorization code</li>
+<li>Client (Spotify) exchanges authorization code and identification info for an access token
+<ul>
+<li>This means the client makes another request to the server using the recently received authorization code along with something called a secret key. This is so that the server really knows that the Client is the real deal. The Client then gives an <em>access token</em>.</li>
+</ul></li>
+<li>Client (Spotify) fetches data from the Server (Facebook) using the access token</li>
+<li>???</li>
+<li>Profit</li>
+</ol>
+<p>I hope that helps! Jk, what good is this explanation without a bit of code?</p>
+<p>The following is something I did to get data from EventBrites API. Some of the data requires authencation. I applied as a client and received a client key and client secret. You can find the entire project <a href="https://github.com/jarvmiller/SI507-Project5">here</a>. You definitely don’t want the client key and secret available, so you typically import it from another file. You’ll also need to search through the app’s documents to get the base form of their authorization url (the link the Client sends the User to so they can tell the Server to give the Client access) and their token url (what the Client visits behind the scenes in order to the the access token)</p>
+<p>Well, the first thing to do is check and see if the result from the API has already been saved, i.e have we cached the data?</p>
+<pre class="python"><code>def check_if_cached(fname):
+    try:
+        with open(fname, &#39;r&#39;) as cache_file:
+            cache_json = cache_file.read()
+            CACHE_DICTION = json.loads(cache_json)
+    except:
+        CACHE_DICTION = {}
+    return CACHE_DICTION</code></pre>
+<p>You might also have the token saved but haven’t cached the data yet. So we will cache the token using the following</p>
+<pre class="python"><code>def get_saved_token():
+    with open(&#39;token.json&#39;, &#39;r&#39;) as f:
+        token_json = f.read()
+        token_dict = json.loads(token_json)
+        return token_dict
+
+
+def save_token(token_dict):
+    with open(&#39;token.json&#39;, &#39;w&#39;) as f:
+        token_json = json.dumps(token_dict)
+        f.write(token_json)</code></pre>
+<p>There might be times that you already have the data cached, but you want to force a download. Or, you may need to get the data for the first time. This necessitates the following</p>
+<pre class="python"><code># import webbrowser
+# import json
+# import requests
+# import requests_oauthlib
+def get_eventbrite_cache(search_params, CACHE_DICTION, CACHE_FNAME, force_download=False):
+    # if we need to get an oauth2 session started
+    if CACHE_DICTION == {} or force_download:
+        # see if we have the token
+        try:
+            token = get_saved_token()
+        except FileNotFoundError:
+            token = None
+
+        if token:
+            print(&#39;Token already saved, just retrieved it&#39;)
+            # start the OAuth2 session using the saved token
+            oauth2inst = requests_oauthlib.OAuth2Session(CLIENT_ID, token=token)
+        else:
+            print(&#39;Getting token the long way&#39;)
+            # Create an instance of an OAuth2Session
+            oauth2inst = requests_oauthlib.OAuth2Session(CLIENT_ID, redirect_uri=REDIRECT_URI) 
+
+            # get the authorization url to send the user to
+            authorization_url, state = oauth2inst.authorization_url(AUTHORIZATION_URL)
+
+            # Opening auth URL for you to sign in to the EventBrite service
+            webbrowser.open(authorization_url) 
+            authorization_response = input(&#39;Authenticate and then enter the full callback URL: &#39;).strip() # Need to get the full URL in order to parse the response
+
+            # The OAuth2Session instance has a method that extracts what we need from the url, and helps do some other back and forth with EB
+            token = oauth2inst.fetch_token(TOKEN_URL, authorization_response=authorization_response, client_secret=CLIENT_SECRET)
+            save_token(token)
+        
+
+        print(&#39;Token saved. Getting search results&#39;)
+        r = oauth2inst.get(&#39;https://www.eventbriteapi.com/v3/events/search/&#39;, params=search_params)
+
+        # the result is now a dictionary
+        response_diction = json.loads(r.text)
+
+        with open(CACHE_FNAME, &#39;w&#39;) as cache_file:
+            print(&#39;caching result as:&#39;, CACHE_FNAME)
+            # this required me to look at what the json result looks like. I save the each event with the ID as the key, and the event information as the value
+            for event in response_diction[&#39;events&#39;]:
+                CACHE_DICTION[event[&#39;id&#39;]] = event
+            cache_json = json.dumps(CACHE_DICTION, indent=2)
+            cache_file.write(cache_json)
+    else:
+        print(&quot;{} already saved as cache, will return it&quot;.format(CACHE_FNAME))
+    
+    return CACHE_DICTION
+</code></pre>
+<p>I hope this code isn’t too ugly :) I’m definitely still working on making my code efficient and nice looking.</p>
+
+      </article>
+
+      <ul class="pager blog-pager">
+        
+          <li class="previous">
+            <a href="/2017/10/14/neural-nets-pt1/" data-toggle="tooltip" data-placement="top" title="Neural Nets - units and decision boundaries">&larr; Previous Post</a>
+          </li>
+        
+        
+      </ul>
+
+      
+
+    </div>
+  </div>
+</div>
+
+    <footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="mailto:jarvm@umich.edu" title="Email me">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/jarvmiller" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://twitter.com/jarvmiller" title="Twitter">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+            
+              Jarvis Miller
+                      
+          
+          
+          &nbsp;&bull;&nbsp;
+          2017
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="/">Abnormally distributed</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="http://gohugo.io">Hugo v0.30.2</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="/js/main.js"></script>
+<script src="/js/highlight.min.js"></script>
+<script> hljs.initHighlightingOnLoad(); </script>
+<script> renderMathInElement(document.body); </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.js" integrity="sha256-UplRCs9v4KXVJvVY+p+RSo5Q4ilAUXh7kpjyIP5odyc=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe-ui-default.min.js" integrity="sha256-PWHOlUzc96pMc8ThwRIXPn8yH4NOLu42RQ0b9SpnpFk=" crossorigin="anonymous"></script>
+<script src="/js/load-photoswipe.js"></script>
+
+
+
+  </body>
+</html>
+
