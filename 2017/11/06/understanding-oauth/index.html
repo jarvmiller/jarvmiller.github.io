@@ -192,15 +192,15 @@ So what is the point of OAuth? As I’ve seen it, it’s a way for web services 
 <ol style="list-style-type: decimal">
 <li>User tells Client (Spotify) to connect to Server (FB)
 <ul>
-<li>This usually looks like clicking on some sort of button that says ‘import contacts’ or something <img src="figs/spotify_invitation.png" alt="Spotify asking if I want to give it my FB data for ease" /></li>
+<li>This usually looks like clicking on some sort of button that says ‘import contacts’ or something <img src="/Users/jarvm/github_website/spotify_invitation.png" alt="Spotify asking if I want to give it my FB data for ease" /></li>
 </ul></li>
 <li>Client (Spotify) directs User to Server (FB)
 <ul>
-<li>Note that the Client also sends a URL that the server sends us back to after we’re done talking to the Server. This is called a <em>redirect url</em>. <img src="figs/spotify_connection.png" alt="Spotify directs me to FB so I can potentially give access" /></li>
+<li>Note that the Client also sends a URL that the server sends us back to after we’re done talking to the Server. This is called a <em>redirect uri</em>. <img src="/Users/jarvm/github_website/spotify_connection.png" alt="Spotify directs me to FB so I can potentially give access" /></li>
 </ul></li>
 <li>User grants Client (Spotify) access
 <ul>
-<li>This might look like a box popping up or that says “Allow xyz app access to your friends list” or “Please log into your account to allow access” and you can click the allow button or log in. <img src="figs/spotify_authorization.png" alt="Me maybe giving Facebook confirmation that it can give Spotify my FB friend list" /></li>
+<li>This might look like a box popping up or that says “Allow xyz app access to your friends list” or “Please log into your account to allow access” and you can click the allow button or log in. <img src="/Users/jarvm/github_website/spotify_authorization.png" alt="Me maybe giving Facebook confirmation that it can give Spotify my FB friend list" /></li>
 </ul></li>
 <li>The Server (Facebook) sends the User back to the Client (Spotify) along with a authorization code</li>
 <li>Client (Spotify) exchanges authorization code and identification info for an access token
