@@ -5,9 +5,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-  <title>Python</title>
-  <meta property="og:title" content="Python" />
-  <meta name="twitter:title" content="Python" />
+  <title>Building a crappy personalized song recommender</title>
+  <meta property="og:title" content="Building a crappy personalized song recommender" />
+  <meta name="twitter:title" content="Building a crappy personalized song recommender" />
+  <meta name="description" content="Note: if you wanna skip straight to the repository, it&rsquo;s here.
+This semester I learned about utilizing APIs and Oauth2 to get data from web services. Time to put this into the test and do something cool - build a crappy song recommender. Here are the steps I followed after some brainstorming. Shoutout to Spotify for having nice data about each song.
+ Ask for several artists that you vibe to Via Spotify, get a few related artists for each artist that the user input Get all albums for each artist as well as their songs get song features for each song (valence/musical positiveness, tempo, danceability, speechiness, energy) Via Genius&rsquo;s API, search for that song and artist combo for each song and get the song&rsquo;s lyrics calculate the sentiment of those lyrics store it all in two database tables, one for songs and one for artists  Now that I have the data, how should I go about recommending songs?">
+  <meta property="og:description" content="Note: if you wanna skip straight to the repository, it&rsquo;s here.
+This semester I learned about utilizing APIs and Oauth2 to get data from web services. Time to put this into the test and do something cool - build a crappy song recommender. Here are the steps I followed after some brainstorming. Shoutout to Spotify for having nice data about each song.
+ Ask for several artists that you vibe to Via Spotify, get a few related artists for each artist that the user input Get all albums for each artist as well as their songs get song features for each song (valence/musical positiveness, tempo, danceability, speechiness, energy) Via Genius&rsquo;s API, search for that song and artist combo for each song and get the song&rsquo;s lyrics calculate the sentiment of those lyrics store it all in two database tables, one for songs and one for artists  Now that I have the data, how should I go about recommending songs?">
+  <meta name="twitter:description" content="Note: if you wanna skip straight to the repository, it&rsquo;s here.
+This semester I learned about utilizing APIs and Oauth2 to get data from web services. Time to put this into the test and do …">
   <meta name="author" content="Jarvis Miller"/>
   <link href='/icon.png' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="/icon.png" />
@@ -15,12 +23,12 @@
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:site" content="@jarvmiller" />
   <meta name="twitter:creator" content="@jarvmiller" />
-  <meta property="og:url" content="/tags/python/" />
+  <meta property="og:url" content="/2017/12/08/building-a-crappy-personalized-song-recommender/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Abnormally distributed" />
 
   <meta name="generator" content="Hugo 0.30.2" />
-  <link rel="canonical" href="/tags/python/" />
+  <link rel="canonical" href="/2017/12/08/building-a-crappy-personalized-song-recommender/" />
   <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Abnormally distributed">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
@@ -135,14 +143,33 @@
 
 
     
+  
+  
+  
+
+
+
+
+  
+
   <header class="header-section ">
+    
     <div class="intro-header no-img">
+      
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <div class="page-heading">
-              <h1>#Python</h1>
-              <hr class="small">
+            <div class="post-heading">
+              <h1>Building a crappy personalized song recommender</h1>
+                
+                
+                  <span class="post-meta">
+  Posted on December 8, 2017
+  
+</span>
+
+
+                
             </div>
           </div>
         </div>
@@ -150,175 +177,52 @@
     </div>
   </header>
 
+
     
-  <div class="container" role="main">
-    <div class="row">
-      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <p>Note: if you wanna skip straight to the repository, <a href="https://github.com/jarvmiller/SI507-F17-FinalProject">it&rsquo;s here</a>.</p>
+
+<p>This semester I learned about utilizing APIs and Oauth2 to get data from web services. Time to put this into the test and do something cool - build a crappy song recommender. Here are the steps I followed after some brainstorming. Shoutout to Spotify for having nice data about each song.</p>
+
+<ul>
+<li>Ask for several artists that you vibe to</li>
+<li>Via Spotify, get a few related artists for each artist that the user input</li>
+<li>Get all albums for each artist as well as their songs</li>
+<li>get song features for each song (valence/musical positiveness, tempo, danceability, speechiness, energy)</li>
+<li>Via Genius&rsquo;s API, search for that song and artist combo for each song and get the song&rsquo;s lyrics</li>
+<li>calculate the sentiment of those lyrics</li>
+<li>store it all in two database tables, one for songs and one for artists</li>
+</ul>
+
+<p>Now that I have the data, how should I go about recommending songs? I decided to do something a bit naive and request the user to rank the song features that they find most important (do they care about danceability more than anything else? What about the sentiment of the lyrics and the valence?). I give each feature a weight based on the ranking. Then I make a weighted sum of those features for all of the songs in the database. I then query the tables to get all songs from the original artists the user specified and take the average of those weighted sums. This is essentially treated as a &ldquo;desired sum&rdquo; by the user by taking into account the artists they wanted me to use as a basis. Then, I order the tables by how close they are to the &lsquo;desired_sum&rsquo; and spit out the top 20 songs that aren&rsquo;t from any of the original artists. As mentioned before, this is definitely naive as a user can put in two artists whose songs features are &lsquo;opposite&rsquo; of one another. So it&rsquo;s not necessarily the case that the average of their weighted sums is meaningful to the user (they may not want something &lsquo;in the middle&rsquo; but want something related to the first artist, and something related to the second artist). But it was pretty fun nonetheless.</p>
+
+<p>There are definitely plenty of ways to improve this. Like I mentioned in the previous paragraph, what should you do if I give you two completely opposite artists in terms of their musicality? How do I get the optimal weights based on the ranking. Should the user have to rank all 6 or can they just rank one or two features and leave the rest with 0 weights?</p>
+
+<p>I can see my friends using this to help create playlists for specific events/moods encountered in the future. Need a playlist for a party? Specify several artists you can vibe to and give high rankings to danceability, tempo, and energy? I think this is a way to get more data from the user directly. For example, I only enjoy 2 or 3 songs from the playlists Spotify creates for me based on the songs I listen to. If they somehow knew that I really listened to those songs because they were dance-able and didnt give a hoot about the lyrics or the genre, I might receive more songs that I&rsquo;d enjoy. Maybe Spotify can try to include a &lsquo;let&rsquo;s get to know you better&rsquo; sorta thing when users first sign up. Or if they see a user is playing a playlist they created exclusively, ask them to fill out a brief ranking or survey so they can help improve or extend their playlist. There are many other ways to try and get this implemented. Maybe Spotify should give me a summer to try and work something out with them? :D</p>
+
+<p>I enjoyed this project and would love to extend it if I had the time. I&rsquo;m interested in Flask development and so I read up on some things and tried to make a Flask app for the user to interact with. It&rsquo;s not pretty at all. Just the bare minimum such that it works. It was mainly to see if I would actually want to learn more about Flask (answer: yes). You can find everything in <a href="https://github.com/jarvmiller/SI507-F17-FinalProject">this repository</a>.</p>
+
+<p>P.S. There is another part of the flask app that lets you choose an artist, pick some albums from that artist, the choose two features from the song features (valence/musical positiveness, tempo, danceability, speechiness, energy) plus the song duration in minutes and the number of unique words in the song. Then it plots it for you to see using bokeh. You can use it for example to look at mumble rappers and see how the number of unique words in their songs is usually extremely low despite how low the song is (ie it&rsquo;s mostly just the chorus and the beat).</p>
+
+      </article>
+
+      <ul class="pager blog-pager">
         
-        <div class="posts-list">
-          
-            <article class="post-preview">
-              <a href="/2017/12/08/building-a-crappy-personalized-song-recommender/">
-                <h2 class="post-title">Building a crappy personalized song recommender</h2>
-
-                
-              </a>
-
-              <p class="post-meta">
-                Posted on December 8, 2017
-              </p>
-              <div class="post-entry">
-                
-                  Note: if you wanna skip straight to the repository, it&rsquo;s here.
-This semester I learned about utilizing APIs and Oauth2 to get data from web services. Time to put this into the test and do something cool - build a crappy song recommender. Here are the steps I followed after some brainstorming. Shoutout to Spotify for having nice data about each song.
- Ask for several artists that you vibe to Via Spotify, get a few related artists for each artist that the user input Get all albums for each artist as well as their songs get song features for each song (valence/musical positiveness, tempo, danceability, speechiness, energy) Via Genius&rsquo;s API, search for that song and artist combo for each song and get the song&rsquo;s lyrics calculate the sentiment of those lyrics store it all in two database tables, one for songs and one for artists  Now that I have the data, how should I go about recommending songs?
-                  <a href="/2017/12/08/building-a-crappy-personalized-song-recommender/" class="post-read-more">[Read More]</a>
-                
-              </div>
-
-              
-                <span class="post-meta">
-                  
-                    #<a href="/tags/python/">python</a>&nbsp;
-                  
-                    #<a href="/tags/oauth/">oauth</a>&nbsp;
-                  
-                    #<a href="/tags/api/">api</a>&nbsp;
-                  
-                </span>
-              
-
-            </article>
-          
-            <article class="post-preview">
-              <a href="/2017/11/06/understanding-oauth/">
-                <h2 class="post-title">Understanding OAuth</h2>
-
-                
-              </a>
-
-              <p class="post-meta">
-                Posted on November 6, 2017
-              </p>
-              <div class="post-entry">
-                
-                  I should definitely finish the other parts of the NN posts, but here is a brief detour into OAuth (Open Authorization). Note that I am still a novice and so there might be explanations that are missing information or lacking depth. But this is a way for me to synthesize what I know, so please message me if there are any mistakes!
-So what is the point of OAuth? As I’ve seen it, it’s a way for web services or apps to exchange information without compromising the people using apps.
-                  <a href="/2017/11/06/understanding-oauth/" class="post-read-more">[Read More]</a>
-                
-              </div>
-
-              
-                <span class="post-meta">
-                  
-                    #<a href="/tags/python/">python</a>&nbsp;
-                  
-                    #<a href="/tags/data/">data</a>&nbsp;
-                  
-                </span>
-              
-
-            </article>
-          
-            <article class="post-preview">
-              <a href="/2017/06/23/gsoc-iii/">
-                <h2 class="post-title">GSOC III</h2>
-
-                
-              </a>
-
-              <p class="post-meta">
-                Posted on June 23, 2017
-              </p>
-              <div class="post-entry">
-                
-                  This week was a busy one. Implemented most of the survey summary statistics and the jackknife to estimate their standard error. This was my first time learning about the jackknife and I thought it was an interesting topic to tell you all about. Within survey data, you tend to have strata and PSUs within the strata that make up subgroups. Now, let&rsquo;s assume that we want to calculate the mean for your survey data - this entails something along the lines of
-                  <a href="/2017/06/23/gsoc-iii/" class="post-read-more">[Read More]</a>
-                
-              </div>
-
-              
-                <span class="post-meta">
-                  
-                    #<a href="/tags/python/">python</a>&nbsp;
-                  
-                    #<a href="/tags/statsmodels/">statsmodels</a>&nbsp;
-                  
-                    #<a href="/tags/gsoc/">GSOC</a>&nbsp;
-                  
-                </span>
-              
-
-            </article>
-          
-            <article class="post-preview">
-              <a href="/2017/06/15/gsoc-ii/">
-                <h2 class="post-title">GSOC II</h2>
-
-                
-              </a>
-
-              <p class="post-meta">
-                Posted on June 15, 2017
-              </p>
-              <div class="post-entry">
-                
-                  Another blog post about my journey with GSOC. This week I&rsquo;m implementing some summary statistics for survey data. Surrvey methodology quite resembles ordinary statistical methodology, but there are some pervasive subtleties there due to the importance of the study design for doing standard errors, tests and confidence intervals in a defensible manner. Learning what others have done to make robust analyses with their survey data is quite fun. The hard part is of course the implementation.
-                  <a href="/2017/06/15/gsoc-ii/" class="post-read-more">[Read More]</a>
-                
-              </div>
-
-              
-                <span class="post-meta">
-                  
-                    #<a href="/tags/python/">python</a>&nbsp;
-                  
-                    #<a href="/tags/statsmodels/">statsmodels</a>&nbsp;
-                  
-                    #<a href="/tags/gsoc/">gsoc</a>&nbsp;
-                  
-                </span>
-              
-
-            </article>
-          
-            <article class="post-preview">
-              <a href="/2017/05/09/gsoc-i/">
-                <h2 class="post-title">GSOC I</h2>
-
-                
-              </a>
-
-              <p class="post-meta">
-                Posted on May 9, 2017
-              </p>
-              <div class="post-entry">
-                
-                  This summer I&rsquo;ll be working on implementing Survey Methods in StatsModels thanks to Google Summer of Code (GSOC). I&rsquo;m excited because I took my first official programming course last semester (C++ seems to stand strong against the test of time) and get to learn more about open source software development.
-I still remember the first programming course I signed up for during my freshman year at Rice. I dropped after the first week.
-                  <a href="/2017/05/09/gsoc-i/" class="post-read-more">[Read More]</a>
-                
-              </div>
-
-              
-                <span class="post-meta">
-                  
-                    #<a href="/tags/python/">python</a>&nbsp;
-                  
-                    #<a href="/tags/statsmodels/">statsmodels</a>&nbsp;
-                  
-                    #<a href="/tags/gsoc/">gsoc</a>&nbsp;
-                  
-                </span>
-              
-
-            </article>
-          
-        </div>
+          <li class="previous">
+            <a href="/2017/11/09/neural-nets-backpropagation/" data-toggle="tooltip" data-placement="top" title="Neural Nets - Backpropagation">&larr; Previous Post</a>
+          </li>
         
-      </div>
+        
+      </ul>
+
+      
+
     </div>
   </div>
+</div>
 
     <footer>
   <div class="container">

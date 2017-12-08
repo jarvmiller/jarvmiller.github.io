@@ -8,10 +8,21 @@
     <language>en-us</language>
     <managingEditor>jarvm@umich.edu (Jarvis Miller)</managingEditor>
     <webMaster>jarvm@umich.edu (Jarvis Miller)</webMaster>
-    <lastBuildDate>Mon, 06 Nov 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 08 Dec 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Building a crappy personalized song recommender</title>
+      <link>/2017/12/08/building-a-crappy-personalized-song-recommender/</link>
+      <pubDate>Fri, 08 Dec 2017 00:00:00 +0000</pubDate>
+      <author>jarvm@umich.edu (Jarvis Miller)</author>
+      <guid>/2017/12/08/building-a-crappy-personalized-song-recommender/</guid>
+      <description>Note: if you wanna skip straight to the repository, it&amp;rsquo;s here.
+This semester I learned about utilizing APIs and Oauth2 to get data from web services. Time to put this into the test and do something cool - build a crappy song recommender. Here are the steps I followed after some brainstorming. Shoutout to Spotify for having nice data about each song.
+ Ask for several artists that you vibe to Via Spotify, get a few related artists for each artist that the user input Get all albums for each artist as well as their songs get song features for each song (valence/musical positiveness, tempo, danceability, speechiness, energy) Via Genius&amp;rsquo;s API, search for that song and artist combo for each song and get the song&amp;rsquo;s lyrics calculate the sentiment of those lyrics store it all in two database tables, one for songs and one for artists  Now that I have the data, how should I go about recommending songs?</description>
+    </item>
     
     <item>
       <title>Understanding OAuth</title>
