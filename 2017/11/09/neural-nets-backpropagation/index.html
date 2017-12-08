@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>Neural Nets - Backpropagation</title>
+  <meta property="og:title" content="Neural Nets - Backpropagation" />
+  <meta name="twitter:title" content="Neural Nets - Backpropagation" />
+  <meta name="description" content="Back to talk about NN a bit more! We talked about linear and nonlinear decision boundaries last time we left off. This is why multi-layered NNs have at least one nonlinear function applied to the input if not many (even many different nonlinear functions). So how do we even start using a Neural Network? It’s beneficial to talk about the input before we talk about all the things we do to that input.">
+  <meta property="og:description" content="Back to talk about NN a bit more! We talked about linear and nonlinear decision boundaries last time we left off. This is why multi-layered NNs have at least one nonlinear function applied to the input if not many (even many different nonlinear functions). So how do we even start using a Neural Network? It’s beneficial to talk about the input before we talk about all the things we do to that input.">
+  <meta name="twitter:description" content="Back to talk about NN a bit more! We talked about linear and nonlinear decision boundaries last time we left off. This is why multi-layered NNs have at least one nonlinear function applied to the …">
+  <meta name="author" content="Jarvis Miller"/>
+  <link href='/icon.png' rel='icon' type='image/x-icon'/>
+  <meta property="og:image" content="/icon.png" />
+  <meta name="twitter:image" content="/icon.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@jarvmiller" />
+  <meta name="twitter:creator" content="@jarvmiller" />
+  <meta property="og:url" content="/2017/11/09/neural-nets-backpropagation/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Abnormally distributed" />
+
+  <meta name="generator" content="Hugo 0.30.2" />
+  <link rel="canonical" href="/2017/11/09/neural-nets-backpropagation/" />
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Abnormally distributed">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="/css/pygment_highlights.css" />
+  <link rel="stylesheet" href="/css/highlight.min.css" />
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.css" integrity="sha256-sCl5PUOGMLfFYctzDW3MtRib0ctyUvI9Qsmq2wXOeBY=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/default-skin/default-skin.min.css" integrity="sha256-BFeI1V+Vh1Rk37wswuOYn5lsTcaU96hGaI7OUVCLjPc=" crossorigin="anonymous" />
+
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">Abnormally distributed</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="About" href="/about/">About</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="Tags" href="/tags/">Tags</a>
+            </li>
+          
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    <div class="avatar-container">
+      <div class="avatar-img-border">
+        
+          <a title="Abnormally distributed" href="/">
+            <img class="avatar-img" src="/icon.png" alt="Abnormally distributed" />
+          </a>
+        
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+
+
+    
+  
+  
+  
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="post-heading">
+              <h1>Neural Nets - Backpropagation</h1>
+                
+                
+                  <span class="post-meta">
+  Posted on November 9, 2017
+  
+</span>
+
+
+                
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <p>Back to talk about NN a bit more! We talked about linear and nonlinear decision boundaries last time we left off. This is why multi-layered NNs have at least one nonlinear function applied to the input if not many (even many different nonlinear functions). So how do we even start using a Neural Network? It’s beneficial to talk about the input before we talk about all the things we do to that input.</p>
+<div id="input-for-neural-networks" class="section level2">
+<h2>Input for Neural Networks</h2>
+<p>Let’s say we have the sentence, “Neural networks rock”. We want to take every sequence of 5 characters and make it into a input feature into our Neural Network. How do we make this feature? We create something called a one hot encoder. This is essentially a binary vector that has length equal to all of the possible letters in our vocabulary. If a certain letter’s position is in the text, we have a one. If our vocabulary was just the english alphabet and spaces, we’d have a vector of length 27, one for each letter and one for a space.</p>
+<p>So now let’s take the first 5 characters of our text, “Neura” and transform it. We will create a vector for each letter. The first vector would be 0 for all 27 positions except the 14th position. The second would be 0 everywhere except the 5th position, so on and so forth. We take these 5 vectors of length 27 and combine them into one vector of length 5*27. For now on, we will let the variable <span class="math inline">\(c:=27\)</span> so that we have a vector of length 5c. We then make another 5c length vector for ‘eural’, one for ‘ural’, and we continue until we have one for ‘works’. This makes 11 vectors of length 5c. Each 5c vector will be a single input for our Neural Network</p>
+</div>
+<div id="arcitecture-for-neural-networks" class="section level2">
+<h2>Arcitecture for Neural Networks</h2>
+<p>So we have our input. It’s a vector of length 5c that is 0 everywhere except in 5 positions. What do we do with this? Well, in the first post, we have weights and biases to multiply with our data (eg the 5c length vector) to make a unit. Here, we usually have a weight matrix such that we can do matrix multiplication and have many units. Then we do a non-linear transformation to the result of that, so on and so forth. For example, let’s have the following weight vectors and biases to predict three languages: English, Italian, and French.</p>
+<ul>
+<li><span class="math inline">\(W^{1}\)</span> is a weight matrix of dimension <span class="math inline">\(5c,d\)</span></li>
+<li><span class="math inline">\(b^{1}\)</span> is a bias vector of dimension <span class="math inline">\(d, 1\)</span></li>
+<li><span class="math inline">\(W^{2}\)</span> is a weight matrix of dimension <span class="math inline">\(3,d\)</span></li>
+<li><span class="math inline">\(b^{2}\)</span> is a bias vector of dimension <span class="math inline">\(3,1\)</span></li>
+<li><span class="math inline">\(x\)</span> is our input vector of length 5c</li>
+</ul>
+<p>Note that we need to figure out which matrices and vectors best transform the input such that we get the right output. We assign the values randomly. If our output is super far off, we should change the values of our matrices. If our output is spot on, then our matrices are probably pretty good as is.</p>
+<p>So what do we do with this? Do some matrix multiplication (linear transformation), transform (nonlinear) the result, do more matrix multiplication (linear transformation), etc. In this case, we have the following nonlinear transformations</p>
+<ul>
+<li><span class="math inline">\(h_{linear}:= W^{1}x + b^{1}\)</span></li>
+<li><span class="math inline">\(h = \sigma(h_{linear}); \sigma(z) = \frac{1}{1+e^{-z}}\)</span></li>
+<li><span class="math inline">\(y_{linear} = W^{2}h + b^{2}\)</span></li>
+<li><span class="math inline">\(\hat{y} = softmax(y_{linear}); softmax(y)[i] = \frac{e^{y[i]}}{\sum_{j}{e^{y[j]}}}\)</span></li>
+</ul>
+<p>The softmax function makes a “probability distribution” vector, so that we can see which language has the maximum probability. We do this for every input vector in the sentence. Now, we have 11 different probability distributions. How should we predict one language? You can either predict for each of the 11 vectors and then take the majority vote, or maybe take the average of them all and then take the maximum. Or you can do something else, as long as it makes sense :)</p>
+</div>
+<div id="improving-our-neural-network" class="section level2">
+<h2>Improving our Neural Network</h2>
+<p>So, we have our averaged probability distribution, <span class="math inline">\(\hat{y}\)</span>. We can compare it to the ground truth, a vector of length 3. It has a 1 based on the language eg French could be [1, 0, 0], english [0, 1, 0], and italian [0, 0, 1]. To see how incorrect we are, we need a loss function. A loss function takes our prediction and our true label, and gives a numerical sense of how far away we were. Let’s choose the function <span class="math inline">\(l(\hat{y}, y) = \frac{1}{2} \sum_{i} (\hat{y}[i] - y[i])\)</span>. If our <span class="math inline">\(\hat{y}\)</span> was something like [.25, .25, .5] and our label was [1, 0, 0], we’d be pretty far off from the truth. So what do we do? As mentioned before, we assigned the values of our Weight and bias matrices randomly. Since we were so far off, we should probably adjust them and hope our next ouput is closer to the ground truth. How do we do this? Backpropagationnnnnnn</p>
+</div>
+<div id="backpropagation" class="section level2">
+<h2>Backpropagation</h2>
+<p>Note that this part will be pretty technical behind the scenes. I’ve tried to condense it to be as simple as possible, so it may be lacking some information.</p>
+<p>We’re currently facing this problem of wanting to adjust our weights and biases. Well, the degree we need to change them depends on how incorrect we are. More incorrect implies a more drastic change. So basically, we should take some information from our loss and use that as a means to figure out just how much we should change. This is a key aspect in something called Stochastic Gradient Descent (SGD). Say we’re looking at a the function <span class="math inline">\(f(x) = x^{2}\)</span>. The bottom of the parabola is at x = 0. Let’s say we’re at x = -3 and we want to get to the bottom. Well, we should go to the right, correct? If we were at x = 3, we sould travel to the left to get to the bottom. If we decide to go left, but take huge of length 5, then our next step would lead us to x = -2. So then we’d need to go right again. This isn’t ideal. What if we took steps of length .1? If we started at x = 3 and went left, we’d eventually get to the bottom, but it’d take <em>forever</em>. This is pretty much what we’re doing with stochastic gradient descent.</p>
+<p>We have a funtion and we want to find the minimum. We first determine which direction we should travel in and how large our steps should be. We take the step. See how far away we are now, determine the direction we should go (if we happened to overshoot), and try again. Eventually, we (hopefully) get close enough to say we’ve approximated the minimum. This is also what we’re doing with backpropagation. We see how far away we are from the true label. We determine our drastic we will change the weights (this is called the learning rate and is fixed in our case) and take something called the gradient to figure out which direction we should move in, then adjust the weights! In a formula, we’d do something like <span class="math inline">\(W^{1} = W^{1} - \alpha \Delta_{W^{1}} L\)</span> where <span class="math inline">\(\alpha\)</span> is the learning rate and <span class="math inline">\(\Delta_{W^{1}} L\)</span> is the gradient with respect to <span class="math inline">\(W^{1}\)</span>. We do this for all our weights and matrices for each <span class="math inline">\(\hat{y}\)</span> we get. Then we take our updated weights, and try again with predicting our target. If we are a bit closer, then the next time we do SGD, the weights might not change as drastically. It’s influenced by our loss. We continue this process until we go through all of the examples in our data, which is referred to as an epoch. Hopefully, our model has improves such that when you try to predict the language of a sentence, it will be spot on. :) Neural networks can be used for many things other than a language identifier. It can be used to classify documents in general (tweets, paragraphs, songs, posts, etc), it’s used in computer vision, so on and so forth. I hope this helps you understand a bit more about NN. If you want an example of how to implement one from scratch, check out <a href="https://github.com/jarvmiller/NLP_hw_2">my repository on github</a>! It even has the derivation that explain how to do backpropogation in the ipynb file while the finished code is in the py file. Happy machine learning! (insert bicep emoji)</p>
+</div>
+
+      </article>
+
+      <ul class="pager blog-pager">
+        
+          <li class="previous">
+            <a href="/2017/11/06/understanding-oauth/" data-toggle="tooltip" data-placement="top" title="Understanding OAuth">&larr; Previous Post</a>
+          </li>
+        
+        
+      </ul>
+
+      
+
+    </div>
+  </div>
+</div>
+
+    <footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="mailto:jarvm@umich.edu" title="Email me">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/jarvmiller" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://twitter.com/jarvmiller" title="Twitter">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+            
+              Jarvis Miller
+                      
+          
+          
+          &nbsp;&bull;&nbsp;
+          2017
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="/">Abnormally distributed</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="http://gohugo.io">Hugo v0.30.2</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="/js/main.js"></script>
+<script src="/js/highlight.min.js"></script>
+<script> hljs.initHighlightingOnLoad(); </script>
+<script> renderMathInElement(document.body); </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.js" integrity="sha256-UplRCs9v4KXVJvVY+p+RSo5Q4ilAUXh7kpjyIP5odyc=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe-ui-default.min.js" integrity="sha256-PWHOlUzc96pMc8ThwRIXPn8yH4NOLu42RQ0b9SpnpFk=" crossorigin="anonymous"></script>
+<script src="/js/load-photoswipe.js"></script>
+
+
+
+  </body>
+</html>
+

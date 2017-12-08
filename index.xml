@@ -8,10 +8,19 @@
     <language>en-us</language>
     <managingEditor>jarvm@umich.edu (Jarvis Miller)</managingEditor>
     <webMaster>jarvm@umich.edu (Jarvis Miller)</webMaster>
-    <lastBuildDate>Mon, 06 Nov 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 09 Nov 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Neural Nets - Backpropagation</title>
+      <link>/2017/11/09/neural-nets-backpropagation/</link>
+      <pubDate>Thu, 09 Nov 2017 00:00:00 +0000</pubDate>
+      <author>jarvm@umich.edu (Jarvis Miller)</author>
+      <guid>/2017/11/09/neural-nets-backpropagation/</guid>
+      <description>Back to talk about NN a bit more! We talked about linear and nonlinear decision boundaries last time we left off. This is why multi-layered NNs have at least one nonlinear function applied to the input if not many (even many different nonlinear functions). So how do we even start using a Neural Network? It’s beneficial to talk about the input before we talk about all the things we do to that input.</description>
+    </item>
     
     <item>
       <title>Understanding OAuth</title>

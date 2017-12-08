@@ -239,7 +239,8 @@ def save_token(token_dict):
 # import json
 # import requests
 # import requests_oauthlib
-def get_eventbrite_cache(search_params, CACHE_DICTION, CACHE_FNAME, force_download=False):
+def get_eventbrite_cache(search_params, CACHE_FNAME, force_download=False):
+    CACHE_DICTION = check_if_cached(CACHE_FNAME)
     # if we need to get an oauth2 session started
     if CACHE_DICTION == {} or force_download:
         # see if we have the token
@@ -297,6 +298,10 @@ def get_eventbrite_cache(search_params, CACHE_DICTION, CACHE_FNAME, force_downlo
             <a href="/2017/10/14/neural-nets-pt1/" data-toggle="tooltip" data-placement="top" title="Neural Nets - units and decision boundaries">&larr; Previous Post</a>
           </li>
         
+        
+          <li class="next">
+            <a href="/2017/11/09/neural-nets-backpropagation/" data-toggle="tooltip" data-placement="top" title="Neural Nets - Backpropagation">Next Post &rarr;</a>
+          </li>
         
       </ul>
 
