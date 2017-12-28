@@ -8,10 +8,19 @@
     <language>en-us</language>
     <managingEditor>jarvm@umich.edu (Jarvis Miller)</managingEditor>
     <webMaster>jarvm@umich.edu (Jarvis Miller)</webMaster>
-    <lastBuildDate>Fri, 08 Dec 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 28 Dec 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Dragging and clicking</title>
+      <link>/2017/12/28/dragging-and-clicking/</link>
+      <pubDate>Thu, 28 Dec 2017 00:00:00 +0000</pubDate>
+      <author>jarvm@umich.edu (Jarvis Miller)</author>
+      <guid>/2017/12/28/dragging-and-clicking/</guid>
+      <description>I forced myself to get rid of Windows after starting grad school. I read plenty of blogs and whatnot explaining why not relying on your mouse (point, click, drag) could make you much more productive while working as a data scientist. I thought only Software Engineers (SWEs) did stuff like that and coding in whatever the heck emacs or vim is. Regardless, I decided to give it a try. Switched to Ubuntu.</description>
+    </item>
     
     <item>
       <title>Building a crappy personalized song recommender</title>

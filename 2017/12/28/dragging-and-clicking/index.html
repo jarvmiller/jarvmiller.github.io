@@ -5,9 +5,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-  <title>Python</title>
-  <meta property="og:title" content="Python" />
-  <meta name="twitter:title" content="Python" />
+  <title>Dragging and clicking</title>
+  <meta property="og:title" content="Dragging and clicking" />
+  <meta name="twitter:title" content="Dragging and clicking" />
+  <meta name="description" content="I forced myself to get rid of Windows after starting grad school. I read plenty of blogs and whatnot explaining why not relying on your mouse (point, click, drag) could make you much more productive while working as a data scientist. I thought only Software Engineers (SWEs) did stuff like that and coding in whatever the heck emacs or vim is. Regardless, I decided to give it a try. Switched to Ubuntu.">
+  <meta property="og:description" content="I forced myself to get rid of Windows after starting grad school. I read plenty of blogs and whatnot explaining why not relying on your mouse (point, click, drag) could make you much more productive while working as a data scientist. I thought only Software Engineers (SWEs) did stuff like that and coding in whatever the heck emacs or vim is. Regardless, I decided to give it a try. Switched to Ubuntu.">
+  <meta name="twitter:description" content="I forced myself to get rid of Windows after starting grad school. I read plenty of blogs and whatnot explaining why not relying on your mouse (point, click, drag) could make you much more productive …">
   <meta name="author" content="Jarvis Miller"/>
   <link href='/icon.png' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="/icon.png" />
@@ -15,12 +18,12 @@
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:site" content="@jarvmiller" />
   <meta name="twitter:creator" content="@jarvmiller" />
-  <meta property="og:url" content="/categories/python/" />
+  <meta property="og:url" content="/2017/12/28/dragging-and-clicking/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Abnormally distributed" />
 
   <meta name="generator" content="Hugo 0.30.2" />
-  <link rel="canonical" href="/categories/python/" />
+  <link rel="canonical" href="/2017/12/28/dragging-and-clicking/" />
   <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Abnormally distributed">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
@@ -135,14 +138,33 @@
 
 
     
+  
+  
+  
+
+
+
+
+  
+
   <header class="header-section ">
+    
     <div class="intro-header no-img">
+      
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <div class="page-heading">
-              <h1>#Python</h1>
-              <hr class="small">
+            <div class="post-heading">
+              <h1>Dragging and clicking</h1>
+                
+                
+                  <span class="post-meta">
+  Posted on December 28, 2017
+  
+</span>
+
+
+                
             </div>
           </div>
         </div>
@@ -150,77 +172,90 @@
     </div>
   </header>
 
+
     
-  <div class="container" role="main">
-    <div class="row">
-      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <p>I forced myself to get rid of Windows after starting grad school. I read plenty of blogs and whatnot explaining why not relying on your mouse (point, click, drag) could make you much more productive while working as a data scientist. I thought only Software Engineers (SWEs) did stuff like that and coding in whatever the heck emacs or vim is. Regardless, I decided to give it a try. Switched to Ubuntu. I&rsquo;m by no means a terminal whiz, but I know some stuff here and there. Today, I was downloading some data and realized I did most of it without my mouse, which was nice. I also realized I should take the time to make some bash scripts to help do some of the messier things that have annoying syntax.</p>
+
+<p>I wanted to look at data from the Divvy bikeshare program in Chicago. I downloaded all of the 2016 data and put it into a divvy directory I made. This is so I can wrangle the data and help put into practice some of the stuff I read in <em>Python for Data Analysis</em>. The files looked something like this:</p>
+
+<ul>
+<li>Divvy_Stations_2016_Q1Q2.csv</li>
+<li>Divvy_Stations_2016_Q3.csv</li>
+<li>Divvy_Stations_2016_Q4.csv</li>
+<li>Divvy_Trips_2016_04.csv</li>
+<li>Divvy_Trips_2016_05.csv</li>
+<li>Divvy_Trips_2016_06.csv</li>
+<li>Divvy_Trips_2016_Q1.csv</li>
+<li>Divvy_Trips_2016_Q3.csv</li>
+<li>Divvy_Trips_2016_Q4.csv</li>
+</ul>
+
+<p>as well as some README files. There were all in different folders. I wanted to do something like the following in python</p>
+
+<pre><code>for filename in os.listdir(&quot;some_directory&quot;):
+    if filename is for trips data:
+        with open(&quot;some_directory/&quot; + filename, 'r') as f:
+        header = next(f)  # Skip the header row.
+        cur.copy_from(f, 'rides', sep=',') # read all the data into a table in my database
+</code></pre>
+
+<p>But some of the trip files ended in months while others ended in quarter numbers. They were also in different folders. I usually would try to click and rename the files, click and make a folder, drag files into the folder, etc. But now I can do the following</p>
+
+<pre><code>$ mkdir data_2016
+$ cd data_2016 # note, I should make this mkdir and cd into a nice alias to combine into one step
+$ mv ../some_folder/*.csv . # move all csv files in some_folder to the current one
+$ repeat last command a couple times
+$ wc *Stations* # see the line and word count for all files with Stations in them to notice that new stations were added in Q3 but none in Q4
+$ mv Divvy_Stations_2016_Q3.csv Divvy_Stations_2016_Q3Q4.csv # rename file
+$ rm Divvy_Stations_2016_Q3.csv # delete file
+$ cat &lt;(cat Divvy_Trips_2016_04.csv) &lt;(tail +2 Divvy_Trips_2016_05.csv) &lt;(tail +2 Divvy_Trips_2016_06.csv) &gt; Divvy_Trips_2016_Q2.csv # merge trips from april-june into one csv, only keeping the header from the first file. So now I have trips for each quarter
+$ less Divvy_Trips_2016_Q2.csv # check around to make sure it works
+$ a little this and a little that
+</code></pre>
+
+<p>And now I have my data in a nice format and in the same directory! And now I can use the python code above to read all the trips data into my database table. I can then repeat for a stations table. Yay. This isn&rsquo;t a sort of &lsquo;look at the cool thing I did&rsquo; post. It&rsquo;s just that I decided to learn how to use the terminal about a year ago and it&rsquo;s nice that I did (and that it&rsquo;s truly useful). I hope someone who has always had the terminal on their &lsquo;to learn&rsquo; list sees this and bumps it up the queue. It can be kinda challenging in the beginning but you can pick it up rather quickly! I&rsquo;ll have another post soon doing the actual analysis of the data.. nothing big, trying to enjoy the break. Sneak peek: I learned that doing some of the processing via sql is much faster than in pandas. I tried</p>
+
+<pre><code>sql = &quot;&quot;&quot;SELECT date_trunc('hour', starttime), COUNT(trip_id) 
+         FROM rides 
+         GROUP BY date_trunc('day', starttime), date_trunc('hour', starttime)&quot;&quot;&quot;    
+grouped = pd.read_sql(sql, conn)
+grouped.index = grouped.date_trunc
+grouped.pivot_table(index=grouped.index.hour, columns=grouped.index.date).plot(legend=False, alpha=0.05);
+</code></pre>
+
+<p>which took about 1.52 seconds while</p>
+
+<pre><code>sql= &quot;&quot;&quot;SELECT * FROM rides&quot;&quot;&quot;
+df = pd.read_sql(sql, conn)
+df.index = df.starttime
+df.groupby([df.index.date, df.index.hour])['trip_id'].count().unstack(level=0).plot(legend=False, alpha=0.05);
+</code></pre>
+
+<p>took about 35 seconds, 24.9 for reading the data, 9.9 for doing the groupby and rendering the plot. I knew the second attempt would take longer bc I&rsquo;m reading over 3 million rows vs 8,756 rows in the first attempt but wow that groupby with the large dataset along with the count and unstacking took a long time vs grouping in sql then just using a pivot table. I should brush up on my sql to do more cool stuff before plotting. Oh, and here is the plot (which you will see in the next post).
+<img src="/figs/divvy_date_hour.png" alt="date_hour_plot" /></p>
+
+<p>Each line represents a day in the year; x axis represents the hours in a day while the y axis are the number of bikes checked out in that hour. We can see it spikes up at 8 am and 5 pm, which shows school or work commutes. But there are also a number of lines where bike checkouts increase steadily, peaking at noon or 1 pm, then decreasing steadily. These probably are during weekends or days where divvy bikes are used for leisure e.g. tourist or high-schoolers during summer vacation. More to come next time!</p>
+
+      </article>
+
+      <ul class="pager blog-pager">
         
-        <div class="posts-list">
-          
-            <article class="post-preview">
-              <a href="/2017/12/28/dragging-and-clicking/">
-                <h2 class="post-title">Dragging and clicking</h2>
-
-                
-              </a>
-
-              <p class="post-meta">
-                Posted on December 28, 2017
-              </p>
-              <div class="post-entry">
-                
-                  I forced myself to get rid of Windows after starting grad school. I read plenty of blogs and whatnot explaining why not relying on your mouse (point, click, drag) could make you much more productive while working as a data scientist. I thought only Software Engineers (SWEs) did stuff like that and coding in whatever the heck emacs or vim is. Regardless, I decided to give it a try. Switched to Ubuntu.
-                  <a href="/2017/12/28/dragging-and-clicking/" class="post-read-more">[Read More]</a>
-                
-              </div>
-
-              
-                <span class="post-meta">
-                  
-                    #<a href="/tags/python/">python</a>&nbsp;
-                  
-                    #<a href="/tags/data/">data</a>&nbsp;
-                  
-                </span>
-              
-
-            </article>
-          
-            <article class="post-preview">
-              <a href="/2017/11/06/understanding-oauth/">
-                <h2 class="post-title">Understanding OAuth</h2>
-
-                
-              </a>
-
-              <p class="post-meta">
-                Posted on November 6, 2017
-              </p>
-              <div class="post-entry">
-                
-                  I should definitely finish the other parts of the NN posts, but here is a brief detour into OAuth (Open Authorization). Note that I am still a novice and so there might be explanations that are missing information or lacking depth. But this is a way for me to synthesize what I know, so please message me if there are any mistakes!
-So what is the point of OAuth? As I’ve seen it, it’s a way for web services or apps to exchange information without compromising the people using apps.
-                  <a href="/2017/11/06/understanding-oauth/" class="post-read-more">[Read More]</a>
-                
-              </div>
-
-              
-                <span class="post-meta">
-                  
-                    #<a href="/tags/python/">python</a>&nbsp;
-                  
-                    #<a href="/tags/data/">data</a>&nbsp;
-                  
-                </span>
-              
-
-            </article>
-          
-        </div>
+          <li class="previous">
+            <a href="/2017/12/08/building-a-crappy-personalized-song-recommender/" data-toggle="tooltip" data-placement="top" title="Building a crappy personalized song recommender">&larr; Previous Post</a>
+          </li>
         
-      </div>
+        
+      </ul>
+
+      
+
     </div>
   </div>
+</div>
 
     <footer>
   <div class="container">
