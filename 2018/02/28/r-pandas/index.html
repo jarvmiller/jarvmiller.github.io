@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>Dplyr &lt;-&gt; Pandas</title>
+  <meta property="og:title" content="Dplyr &lt;-&gt; Pandas" />
+  <meta name="twitter:title" content="Dplyr &lt;-&gt; Pandas" />
+  <meta name="description" content="I want to become familiar with both the tools in the tidyverse as well as in Python. This blog post will highlight some of the typical things people might do in R or Python when working with data. It’s not meant as a ‘from scratch’ tutorial so there are things I won’t explain thoroughly or at all. It’s mainly so I can remember pandas functionality. For now, we will focus on wrangling the data.">
+  <meta property="og:description" content="I want to become familiar with both the tools in the tidyverse as well as in Python. This blog post will highlight some of the typical things people might do in R or Python when working with data. It’s not meant as a ‘from scratch’ tutorial so there are things I won’t explain thoroughly or at all. It’s mainly so I can remember pandas functionality. For now, we will focus on wrangling the data.">
+  <meta name="twitter:description" content="I want to become familiar with both the tools in the tidyverse as well as in Python. This blog post will highlight some of the typical things people might do in R or Python when working with data. …">
+  <meta name="author" content="Jarvis Miller"/>
+  <link href='/icon.png' rel='icon' type='image/x-icon'/>
+  <meta property="og:image" content="/icon.png" />
+  <meta name="twitter:image" content="/icon.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@jarvmiller" />
+  <meta name="twitter:creator" content="@jarvmiller" />
+  <meta property="og:url" content="/2018/02/28/r-pandas/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Abnormally distributed" />
+
+  <meta name="generator" content="Hugo 0.30.2" />
+  <link rel="canonical" href="/2018/02/28/r-pandas/" />
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Abnormally distributed">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="/css/pygment_highlights.css" />
+  <link rel="stylesheet" href="/css/highlight.min.css" />
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.css" integrity="sha256-sCl5PUOGMLfFYctzDW3MtRib0ctyUvI9Qsmq2wXOeBY=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/default-skin/default-skin.min.css" integrity="sha256-BFeI1V+Vh1Rk37wswuOYn5lsTcaU96hGaI7OUVCLjPc=" crossorigin="anonymous" />
+
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">Abnormally distributed</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="About" href="/about/">About</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="Tags" href="/tags/">Tags</a>
+            </li>
+          
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    <div class="avatar-container">
+      <div class="avatar-img-border">
+        
+          <a title="Abnormally distributed" href="/">
+            <img class="avatar-img" src="/icon.png" alt="Abnormally distributed" />
+          </a>
+        
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+
+
+    
+  
+  
+  
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="post-heading">
+              <h1>Dplyr &lt;-&gt; Pandas</h1>
+                
+                
+                  <span class="post-meta">
+  Posted on February 28, 2018
+  
+</span>
+
+
+                
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <p>I want to become familiar with both the tools in the tidyverse as well as in Python. This blog post will highlight some of the typical things people might do in R or Python when working with data. It’s not meant as a <em>‘from scratch’</em> tutorial so there are things I won’t explain thoroughly or at all. It’s mainly so I can remember pandas functionality. For now, we will focus on wrangling the data. Next post will cover more data wrangling as well as visualization. To give credit, most of these exercises are found in Hadley Wickham’s <code>R for data science</code> textbook, which can be found on Amazon or online.</p>
+<p><em>Note: From looking at who follows me on Twitter, I assume the typical person who looks at this post will be more familiar with R than Pandas and will write this blog post under this assumption. This just means I’ll explain more of the basics in pandas rather than R.</em></p>
+<p><strong>The data we will be using is the <code>nycflights13::flights</code> dataset. It is stored as <code>flights</code></strong></p>
+<pre class="r"><code># flights.info() or flights.head() to see actual values
+glimpse(flights) # R</code></pre>
+<pre><code>## Observations: 336,776
+## Variables: 19
+## $ year           &lt;int&gt; 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013,...
+## $ month          &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+## $ day            &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+## $ dep_time       &lt;int&gt; 517, 533, 542, 544, 554, 554, 555, 557, 557, 55...
+## $ sched_dep_time &lt;int&gt; 515, 529, 540, 545, 600, 558, 600, 600, 600, 60...
+## $ dep_delay      &lt;dbl&gt; 2, 4, 2, -1, -6, -4, -5, -3, -3, -2, -2, -2, -2...
+## $ arr_time       &lt;int&gt; 830, 850, 923, 1004, 812, 740, 913, 709, 838, 7...
+## $ sched_arr_time &lt;int&gt; 819, 830, 850, 1022, 837, 728, 854, 723, 846, 7...
+## $ arr_delay      &lt;dbl&gt; 11, 20, 33, -18, -25, 12, 19, -14, -8, 8, -2, -...
+## $ carrier        &lt;chr&gt; &quot;UA&quot;, &quot;UA&quot;, &quot;AA&quot;, &quot;B6&quot;, &quot;DL&quot;, &quot;UA&quot;, &quot;B6&quot;, &quot;EV&quot;,...
+## $ flight         &lt;int&gt; 1545, 1714, 1141, 725, 461, 1696, 507, 5708, 79...
+## $ tailnum        &lt;chr&gt; &quot;N14228&quot;, &quot;N24211&quot;, &quot;N619AA&quot;, &quot;N804JB&quot;, &quot;N668DN...
+## $ origin         &lt;chr&gt; &quot;EWR&quot;, &quot;LGA&quot;, &quot;JFK&quot;, &quot;JFK&quot;, &quot;LGA&quot;, &quot;EWR&quot;, &quot;EWR&quot;...
+## $ dest           &lt;chr&gt; &quot;IAH&quot;, &quot;IAH&quot;, &quot;MIA&quot;, &quot;BQN&quot;, &quot;ATL&quot;, &quot;ORD&quot;, &quot;FLL&quot;...
+## $ air_time       &lt;dbl&gt; 227, 227, 160, 183, 116, 150, 158, 53, 140, 138...
+## $ distance       &lt;dbl&gt; 1400, 1416, 1089, 1576, 762, 719, 1065, 229, 94...
+## $ hour           &lt;dbl&gt; 5, 5, 5, 5, 6, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5,...
+## $ minute         &lt;dbl&gt; 15, 29, 40, 45, 0, 58, 0, 0, 0, 0, 0, 0, 0, 0, ...
+## $ time_hour      &lt;dttm&gt; 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013...</code></pre>
+<div id="a-bit-about-python-dataframes" class="section level3">
+<h3>A bit about Python DataFrames</h3>
+<p>Pandas dataframes are similar to R dataframes except for a few things that I will touch upon. Each column is considered something called a <code>Series</code>, which is a one-dimensional array with axis labels (that need not be unique). The axis labels are collectively referred to as the index. If you don’t specify labels, they are just the row numbers. Series and Dataframes can also have hierarchical labels, which is a big difference with R dataframes.</p>
+<p>Usually, if you have a dataframe called <code>df</code>, you’d so something like this: <code>df.function_name()</code> vs <code>function_name(df)</code>. This is because the dataframe has a number of functions specific to it called <em>methods</em>, and we call methods with the above syntax. You’d also see something like <code>pd.function_name()</code> where <code>pd</code> is short for pandas.</p>
+<p>To get certain columns in Pandas, you use the following: <code>df['col_name']</code> or <code>df[['col_name', 'other_col_name', 'another_col_name']]</code> if you want to get more than one column.</p>
+<hr />
+<p>Next, we should talk about using <code>iloc</code> or <code>loc</code>. <code>iloc</code> is for integer positioning (focusing on the order or rows or columns). <code>loc</code> is for locational positioning (focusing on the labels/names of rows or columns)</p>
+<pre class="python"><code>import feather
+path = &quot;dat/flights.feather&quot;
+flights = feather.read_dataframe(path)
+# to make things more apparent, I will change the index to be the timehour column
+flights = flights.set_index(flights[&#39;time_hour&#39;])
+# selecting the first five rows using iloc
+print(flights.iloc[0:5])</code></pre>
+<pre><code>##                            year  month  day  dep_time  sched_dep_time  \
+## time_hour                                                               
+## 2013-01-01 05:00:00+00:00  2013      1    1     517.0             515   
+## 2013-01-01 05:00:00+00:00  2013      1    1     533.0             529   
+## 2013-01-01 05:00:00+00:00  2013      1    1     542.0             540   
+## 2013-01-01 05:00:00+00:00  2013      1    1     544.0             545   
+## 2013-01-01 06:00:00+00:00  2013      1    1     554.0             600   
+## 
+##                            dep_delay  arr_time  sched_arr_time  arr_delay  \
+## time_hour                                                                   
+## 2013-01-01 05:00:00+00:00        2.0     830.0             819       11.0   
+## 2013-01-01 05:00:00+00:00        4.0     850.0             830       20.0   
+## 2013-01-01 05:00:00+00:00        2.0     923.0             850       33.0   
+## 2013-01-01 05:00:00+00:00       -1.0    1004.0            1022      -18.0   
+## 2013-01-01 06:00:00+00:00       -6.0     812.0             837      -25.0   
+## 
+##                           carrier  flight tailnum origin dest  air_time  \
+## time_hour                                                                 
+## 2013-01-01 05:00:00+00:00      UA    1545  N14228    EWR  IAH     227.0   
+## 2013-01-01 05:00:00+00:00      UA    1714  N24211    LGA  IAH     227.0   
+## 2013-01-01 05:00:00+00:00      AA    1141  N619AA    JFK  MIA     160.0   
+## 2013-01-01 05:00:00+00:00      B6     725  N804JB    JFK  BQN     183.0   
+## 2013-01-01 06:00:00+00:00      DL     461  N668DN    LGA  ATL     116.0   
+## 
+##                            distance  hour  minute                 time_hour  
+## time_hour                                                                    
+## 2013-01-01 05:00:00+00:00    1400.0   5.0    15.0 2013-01-01 05:00:00+00:00  
+## 2013-01-01 05:00:00+00:00    1416.0   5.0    29.0 2013-01-01 05:00:00+00:00  
+## 2013-01-01 05:00:00+00:00    1089.0   5.0    40.0 2013-01-01 05:00:00+00:00  
+## 2013-01-01 05:00:00+00:00    1576.0   5.0    45.0 2013-01-01 05:00:00+00:00  
+## 2013-01-01 06:00:00+00:00     762.0   6.0     0.0 2013-01-01 06:00:00+00:00</code></pre>
+<p><code>flights.loc[0:5]</code> would raise an error because the index labels arent 0, 1, 2, 3, 4, and 5! In this case, they actually repeat!</p>
+<p>Instead, we index using loc by giving the name of the label</p>
+<pre class="python"><code>import feather
+path = &quot;dat/flights.feather&quot;
+flights = feather.read_dataframe(path)
+flights = flights.set_index(flights[&#39;time_hour&#39;])
+# use loc and the label value for the index
+flights_sub = flights.loc[&#39;2013-01-01T06:00:00Z&#39;]
+# get the unique index values for the subset dataframe
+print(flights_sub.index.unique())</code></pre>
+<pre><code>## DatetimeIndex([&#39;2013-01-01 06:00:00+00:00&#39;], dtype=&#39;datetime64[ns, UTC]&#39;, name=&#39;time_hour&#39;, freq=None)</code></pre>
+<p>The same works for indexing into columns as well. We’d just specify the label or integer positions of the columns as the second argument, eg <code>flights.loc[:, ['year', 'month']]</code> or <code>flights.iloc[:, [0, 1]]</code> since the year and month column are the 0th and 1st column in the dataframe</p>
+<p>What if we wanted the first 5 rows of the columns ‘year’ and ‘month’. So far, we either need to use <code>iloc</code> and memorize the numerical index of the columns (<code>flights.iloc[0:5, [0, 1]]</code>), or use <code>loc</code> and somehow subset to just the first 5 elements. We can use helper functions to combine both label indexing and positional indexing</p>
+<ul>
+<li><code>flights.iloc[0:5, ['year', 'month']]</code> fails bc [‘year’, ‘month’] is for label indexing</li>
+<li><code>flights.loc[0:5, ['year', 'month']]</code> fails bc 0:5 does not match the index label</li>
+</ul>
+<pre class="python"><code>import feather
+path = &quot;dat/flights.feather&quot;
+flights = feather.read_dataframe(path)
+flights = flights.set_index(flights[&#39;time_hour&#39;])
+# if you want to use iloc but specify column names, you can use df.columns.get_loc(&#39;col_names&#39;)
+# or for multiple columns, use df.columns.get_indexer([list of columns]) like below
+print(flights.iloc[0:5, flights.columns.get_indexer([&#39;year&#39;, &#39;month&#39;])])</code></pre>
+<pre><code>##                            year  month
+## time_hour                             
+## 2013-01-01 05:00:00+00:00  2013      1
+## 2013-01-01 05:00:00+00:00  2013      1
+## 2013-01-01 05:00:00+00:00  2013      1
+## 2013-01-01 05:00:00+00:00  2013      1
+## 2013-01-01 06:00:00+00:00  2013      1</code></pre>
+<pre class="python"><code>import feather
+path = &quot;dat/flights.feather&quot;
+flights = feather.read_dataframe(path)
+flights = flights.set_index(flights[&#39;time_hour&#39;])
+# if you want to use loc without memorizing the index names, you can slice df.index
+# here, I use the unique method bc the index is repeated multiple times
+index_vals = flights.index.unique()[0:2]
+print(index_vals)</code></pre>
+<pre><code>## DatetimeIndex([&#39;2013-01-01 05:00:00+00:00&#39;, &#39;2013-01-01 06:00:00+00:00&#39;], dtype=&#39;datetime64[ns, UTC]&#39;, name=&#39;time_hour&#39;, freq=None)</code></pre>
+<pre class="python"><code>print(flights.loc[index_vals, [&#39;year&#39;, &#39;month&#39;]].head())</code></pre>
+<pre><code>##                            year  month
+## time_hour                             
+## 2013-01-01 05:00:00+00:00  2013      1
+## 2013-01-01 05:00:00+00:00  2013      1
+## 2013-01-01 05:00:00+00:00  2013      1
+## 2013-01-01 05:00:00+00:00  2013      1
+## 2013-01-01 05:00:00+00:00  2013      1</code></pre>
+</div>
+<div id="transforming-data" class="section level1">
+<h1>Transforming data</h1>
+<div id="filter-rows" class="section level3">
+<h3>Filter rows</h3>
+<p>Using <code>dplyr</code>, we have the trusty filter function that works like this:</p>
+<p><code>filter(flights, month == 1, day == 1, origin == 'JFK')</code></p>
+<p>The python solution is below, which uses the <code>query</code> method.</p>
+<pre class="python"><code>import feather
+path = &quot;dat/flights.feather&quot;
+flights = feather.read_dataframe(path)
+print(flights.query(&#39;month == 1 &amp; day == 1 &amp; origin == &quot;JFK&quot;&#39;)[[&#39;month&#39;, &#39;day&#39;, &#39;time_hour&#39;]].tail())</code></pre>
+<pre><code>##      month  day                 time_hour
+## 833      1    1 2013-01-01 22:00:00+00:00
+## 835      1    1 2013-01-01 23:00:00+00:00
+## 836      1    1 2013-01-01 23:00:00+00:00
+## 837      1    1 2013-01-01 23:00:00+00:00
+## 841      1    1 2013-01-01 06:00:00+00:00</code></pre>
+<p>In python, you can also do the following:</p>
+<p><code>flights[(flights['month'] == 1) &amp; (flights['day'] == 1) &amp; (flights['origin'] == 'JFK')].tail()</code></p>
+</div>
+<div id="isin" class="section level3">
+<h3>isin()</h3>
+<p>There might be times where you want to filter based on several possibilities. In Python, If I wanted any flights September-December, I’d have to write the following</p>
+<p><code>flights.query('month == 12 | month == 11 | month ==10 | == 9 | month == 9')</code></p>
+<p>In R, we can use <code>%in%</code> inside filter to see if the value of the variable is contained in some vector. <code>filter(flights, month %in% c(9,10,11,12))</code>. In Pandas, we use the <code>isin</code> method. With this method, we have no need to use query.</p>
+<pre class="python"><code>import feather
+path = &quot;dat/flights.feather&quot;
+flights = feather.read_dataframe(path)
+# winter_filter is a column of True and False
+winter_filter = flights[&#39;month&#39;].isin([9,10,11,12])
+flights_winter = flights[winter_filter]
+# print unique values of the &#39;month&#39; column
+print(flights_winter[&#39;month&#39;].unique())</code></pre>
+<pre><code>## [10 11 12  9]</code></pre>
+</div>
+<div id="arrange-rows" class="section level3">
+<h3>Arrange rows</h3>
+<p>In R, we can use</p>
+<p><code>arrange(flights, month, desc(day))</code></p>
+<p>while in Python, you can use <code>sort_values</code> to sort columns. The columns should be strings (or a list of strings for multiple columns). The ascending parameter should be true or False (or a list of booleans for multiple columns).</p>
+<pre class="python"><code>import feather
+path = &quot;dat/flights.feather&quot;
+flights = feather.read_dataframe(path)
+print(flights.sort_values([&#39;month&#39;, &#39;day&#39;], ascending=[True, False])[[&#39;month&#39;, &#39;day&#39;]].head())</code></pre>
+<pre><code>##        month  day
+## 26076      1   31
+## 26077      1   31
+## 26078      1   31
+## 26079      1   31
+## 26080      1   31</code></pre>
+<p>Notice how the month starts in January/smallest possibility (ascending=True) but the day column now starts with the biggest number (ascending=False). <em>You can use the <code>na_position</code> parameter</em> to say whether you want NaN values to be first or last. <code>flights.sort_values('dep_time', na_position='first', ascending=False)</code></p>
+</div>
+<div id="selecting-and-helper-functions" class="section level3">
+<h3>Selecting (and helper functions)</h3>
+<p>In R, you can do the following <code>select(flights, day, month, year)</code> to select the columns <em>year</em>, <em>month</em>, and <em>day</em>. You can also do</p>
+<p><code>select(flights, year:day)</code> to select all columns between year and day (inclusive). If you want all columns except the ones between year and day, you can write <code>select(flights, -c(year:day))</code> As described in r4ds, there are a number of helper functions you can use within select():</p>
+<ul>
+<li><p><code>starts_with(&quot;abc&quot;)</code>: matches names that begin with “abc”.</p></li>
+<li><p><code>ends_with(&quot;xyz&quot;)</code>: matches names that end with “xyz”.</p></li>
+<li><p><code>contains(&quot;ijk&quot;)</code>: matches names that contain “ijk”.</p></li>
+</ul>
+<p>You can thankfully do something similar in Pandas. Each dataframe has a <code>columns</code> attribute that you can access via <code>df_name.columns</code>. It’s just another index but for the columns instead of the rows. The cool thing is that Series and Index objects are equipped with a set of string processing methods that make it easy to operate on each element of the array. These are accessed via the str attribute. Here is the pandas equivalent of the helper functions in <code>select()</code></p>
+<pre class="python"><code>import feather
+path = &quot;dat/flights.feather&quot;
+flights = feather.read_dataframe(path)
+print(flights.loc[:, flights.columns.str.endswith(&#39;delay&#39;)].head())</code></pre>
+<pre><code>##    dep_delay  arr_delay
+## 0        2.0       11.0
+## 1        4.0       20.0
+## 2        2.0       33.0
+## 3       -1.0      -18.0
+## 4       -6.0      -25.0</code></pre>
+<pre class="python"><code>print(flights.iloc[:5, flights.columns.str.contains(&#39;dep|arr&#39;)]) # this allows you to get all columns that have the string &#39;dep&#39; or &#39;arr&#39; in them</code></pre>
+<pre><code>##    dep_time  sched_dep_time  dep_delay  arr_time  sched_arr_time  arr_delay  \
+## 0     517.0             515        2.0     830.0             819       11.0   
+## 1     533.0             529        4.0     850.0             830       20.0   
+## 2     542.0             540        2.0     923.0             850       33.0   
+## 3     544.0             545       -1.0    1004.0            1022      -18.0   
+## 4     554.0             600       -6.0     812.0             837      -25.0   
+## 
+##   carrier  
+## 0      UA  
+## 1      UA  
+## 2      AA  
+## 3      B6  
+## 4      DL</code></pre>
+<p>You can also drop certain columns (analagous to <code>select(flights, -(year:day))</code>! It’s best if you have a list of columns though.</p>
+<pre class="python"><code>import feather
+path = &quot;dat/flights.feather&quot;
+flights = feather.read_dataframe(path)
+cols_to_drop = list(flights.columns[flights.columns.str.contains(&#39;dep|arr&#39;)])
+print(cols_to_drop)</code></pre>
+<pre><code>## [&#39;dep_time&#39;, &#39;sched_dep_time&#39;, &#39;dep_delay&#39;, &#39;arr_time&#39;, &#39;sched_arr_time&#39;, &#39;arr_delay&#39;, &#39;carrier&#39;]</code></pre>
+<pre class="python"><code>print(flights.drop(cols_to_drop, axis=1).head()) # axis=1 means to look across the columns</code></pre>
+<pre><code>##    year  month  day  flight tailnum origin dest  air_time  distance  hour  \
+## 0  2013      1    1    1545  N14228    EWR  IAH     227.0    1400.0   5.0   
+## 1  2013      1    1    1714  N24211    LGA  IAH     227.0    1416.0   5.0   
+## 2  2013      1    1    1141  N619AA    JFK  MIA     160.0    1089.0   5.0   
+## 3  2013      1    1     725  N804JB    JFK  BQN     183.0    1576.0   5.0   
+## 4  2013      1    1     461  N668DN    LGA  ATL     116.0     762.0   6.0   
+## 
+##    minute                 time_hour  
+## 0    15.0 2013-01-01 05:00:00+00:00  
+## 1    29.0 2013-01-01 05:00:00+00:00  
+## 2    40.0 2013-01-01 05:00:00+00:00  
+## 3    45.0 2013-01-01 05:00:00+00:00  
+## 4     0.0 2013-01-01 06:00:00+00:00</code></pre>
+</div>
+<div id="adding-new-variables" class="section level3">
+<h3>Adding new variables</h3>
+<p>R’s dplyr has a nice <code>mutate</code> function that allows you to create new variables, and even refer to that variable in the same mutate statement to create a new variable!</p>
+<p>e.g <code>mutate(flights, mph = distance / (air_time / 60), new_var = function_name(mph))</code></p>
+<p>You can also discretize certain variables with <code>case_when</code></p>
+<pre><code>mutate(flights, lateness = case_when(arr_delay &gt; 60 ~ &#39;very_late&#39;,
+                                     arr_delay &lt;= 60 ~ &#39;kinda_late&#39;))</code></pre>
+<p>For pandas, we have the the <code>assign</code> operator. The drawback is that <strong>you can’t refer to a newly created variable in the same assign statement</strong> (so you cant do the first example above using <code>assign</code>). You can also just say <code>df['new_col'] = value</code>. Here is an example of create new columns where <code>dep_time</code> is converted to minutes since midnight</p>
+<p><code>flights = (flights.assign(dep_time_mins = flights.dep_time.apply(lambda x: (x // 100) * 60 + (x % 100)))</code></p>
+<p>As far as I know, Pandas also does not have it’s own version of case_when. You’d have to simply create a new column, then fill it in with multiple boolean indexing statements. For example, the Pandas version of the <code>case_when</code> example would be</p>
+<pre><code>flights[&#39;lateness&#39;] = &quot;very_late&quot;
+flights.loc[flights[&#39;arr_delay&#39;] &lt;= 60] = &quot;kinda_late&quot;</code></pre>
+<p>Which is definitely not as nice as it makes it harder to chain many actions together like in R (<code>df %&gt;% filter(blah) %&gt;% mutate(yay = case_when(mmhmm))) %&gt;% groupby(yay) %&gt;% summarise(oh_yeah)</code>)</p>
+</div>
+<div id="groupby" class="section level3">
+<h3>Groupby</h3>
+<p>Quite frequently, one might want to do apply some function to the data but after grouping the data by some sort of category. For example, we can look at the average arrival delay for each month (function is the mean, data is the arr_delay column, grouping is the month column).</p>
+<p>For example, the following finds all destinations that were flown to more than 365 times.</p>
+<pre class="r"><code>popular_dests &lt;- flights %&gt;% 
+  group_by(dest) %&gt;% 
+  count() %&gt;%
+  filter(n &gt; 365) %&gt;%
+  arrange(desc(n))
+popular_dests</code></pre>
+<pre><code>## # A tibble: 77 x 2
+## # Groups:   dest [77]
+##    dest      n
+##    &lt;chr&gt; &lt;int&gt;
+##  1 ORD   17283
+##  2 ATL   17215
+##  3 LAX   16174
+##  4 BOS   15508
+##  5 MCO   14082
+##  6 CLT   14064
+##  7 SFO   13331
+##  8 FLL   12055
+##  9 MIA   11728
+## 10 DCA    9705
+## # ... with 67 more rows</code></pre>
+<p>Pandas has a <code>groupby</code> method that you can use. Instead of passing results to the next function using <code>%&gt;%</code> like in R, we chain methods together in Pandas. To make sure you dont have super long lines of code like <code>df[[list_of_cols]].groupby().function_name.col_name.another_method</code>, you can surround your code in parenthesis and put each function on a new line. You’ll see an example below</p>
+<p>So, lets see how you can do the same thing above in Pandas</p>
+<pre class="python"><code>import feather
+path = &quot;dat/flights.feather&quot;
+flights = feather.read_dataframe(path)
+grouped = (flights
+           .groupby(&#39;dest&#39;)
+           .aggregate({&#39;dest&#39;: &#39;count&#39;})
+           .rename(columns={&#39;dest&#39;: &#39;n&#39;})
+           .reset_index())
+           
+print((grouped[grouped[&#39;n&#39;] &gt; 365]
+ .sort_values(by=&#39;n&#39;, ascending=False).head(10)))</code></pre>
+<pre><code>##    dest      n
+## 69  ORD  17283
+## 4   ATL  17215
+## 49  LAX  16174
+## 11  BOS  15508
+## 54  MCO  14082
+## 23  CLT  14064
+## 90  SFO  13331
+## 35  FLL  12055
+## 58  MIA  11728
+## 28  DCA   9705</code></pre>
+<p>So what happened? We got the data, used the groupby method and told it how we wanted to group, then we used the aggregate method, which takes either just a function (and applies it to every column), or takes a dictionary with the column as the key, and the function to apply as the value. We then rename that newly created column to be called ‘n’. Then we use <code>reset_index()</code> to make the index, which was each <code>dest</code> value into a column.</p>
+<p>Now, we need to figure out which ones were visited 366+ times. So I use boolean indexing, sort by the number of visits, then look at the first 10 (ie the top 10 destinations).</p>
+<p>One things that I find useful is that <code>aggregate</code> can have a have a list of functions as values, so I could do something like</p>
+<p><code>flights.groupby('dest').aggregate({'dest': 'count', 'arr_delay'}: ['np.mean', 'np.std'])</code></p>
+<p>You can do something similar using dplyr using <code>mutate_at(vars(variable_name), funs(mean, std))</code></p>
+</div>
+<div id="thoughts" class="section level3">
+<h3>Thoughts</h3>
+<p>I like both pandas and R. They are similar in many ways when working with data, which is nice. I will say that reading nice dplyr code imo is much easier than reading nice pandas code. The function names are so nice and embody the whole <strong>functions should be verbs and should represent what they do</strong> idea I heard when I first started programming. <code>Filter, select, mutate_at, mutate_if, summarise</code>, etc are all great names. You can do the same in Pandas, but it feels a bit clunky. But I do like using Python a lot! I’ve used it to develop OSS in Statsmodels, build Flask apps that fetches and caches spotify data, etc. I think it just feels a bit harder to get used to Pandas and especially matplotlib than dplyr, ggplot, etc. But then again, I learned python less than a year ago and just started using Pandas consistently for a month or so. I hope after making myself use Python for the remainder of this semester, I will be much more confortable with it. I hope this blog post helped you as well!</p>
+</div>
+</div>
+
+      </article>
+
+      <ul class="pager blog-pager">
+        
+          <li class="previous">
+            <a href="/2017/12/28/dragging-and-clicking/" data-toggle="tooltip" data-placement="top" title="Dragging and clicking">&larr; Previous Post</a>
+          </li>
+        
+        
+      </ul>
+
+      
+
+    </div>
+  </div>
+</div>
+
+    <footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="mailto:jarvm@umich.edu" title="Email me">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/jarvmiller" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://twitter.com/jarvmiller" title="Twitter">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+            
+              Jarvis Miller
+                      
+          
+          
+          &nbsp;&bull;&nbsp;
+          2018
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="/">Abnormally distributed</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="http://gohugo.io">Hugo v0.30.2</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="/js/main.js"></script>
+<script src="/js/highlight.min.js"></script>
+<script> hljs.initHighlightingOnLoad(); </script>
+<script> renderMathInElement(document.body); </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.js" integrity="sha256-UplRCs9v4KXVJvVY+p+RSo5Q4ilAUXh7kpjyIP5odyc=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe-ui-default.min.js" integrity="sha256-PWHOlUzc96pMc8ThwRIXPn8yH4NOLu42RQ0b9SpnpFk=" crossorigin="anonymous"></script>
+<script src="/js/load-photoswipe.js"></script>
+
+
+
+  </body>
+</html>
+

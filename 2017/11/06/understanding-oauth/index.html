@@ -228,8 +228,6 @@ So what is the point of OAuth? As I’ve seen it, it’s a way for web services 
         token_json = f.read()
         token_dict = json.loads(token_json)
         return token_dict
-
-
 def save_token(token_dict):
     with open(&#39;token.json&#39;, &#39;w&#39;) as f:
         token_json = json.dumps(token_dict)
@@ -248,7 +246,6 @@ def get_eventbrite_cache(search_params, CACHE_FNAME, force_download=False):
             token = get_saved_token()
         except FileNotFoundError:
             token = None
-
         if token:
             print(&#39;Token already saved, just retrieved it&#39;)
             # start the OAuth2 session using the saved token
@@ -257,25 +254,19 @@ def get_eventbrite_cache(search_params, CACHE_FNAME, force_download=False):
             print(&#39;Getting token the long way&#39;)
             # Create an instance of an OAuth2Session
             oauth2inst = requests_oauthlib.OAuth2Session(CLIENT_ID, redirect_uri=REDIRECT_URI) 
-
             # get the authorization url to send the user to
             authorization_url, state = oauth2inst.authorization_url(AUTHORIZATION_URL)
-
             # Opening auth URL for you to sign in to the EventBrite service
             webbrowser.open(authorization_url) 
             authorization_response = input(&#39;Authenticate and then enter the full callback URL: &#39;).strip() # Need to get the full URL in order to parse the response
-
             # The OAuth2Session instance has a method that extracts what we need from the url, and helps do some other back and forth with EB
             token = oauth2inst.fetch_token(TOKEN_URL, authorization_response=authorization_response, client_secret=CLIENT_SECRET)
             save_token(token)
         
-
         print(&#39;Token saved. Getting search results&#39;)
         r = oauth2inst.get(&#39;https://www.eventbriteapi.com/v3/events/search/&#39;, params=search_params)
-
         # the result is now a dictionary
         response_diction = json.loads(r.text)
-
         with open(CACHE_FNAME, &#39;w&#39;) as cache_file:
             print(&#39;caching result as:&#39;, CACHE_FNAME)
             # this required me to look at what the json result looks like. I save the each event with the ID as the key, and the event information as the value
@@ -286,8 +277,7 @@ def get_eventbrite_cache(search_params, CACHE_FNAME, force_download=False):
     else:
         print(&quot;{} already saved as cache, will return it&quot;.format(CACHE_FNAME))
     
-    return CACHE_DICTION
-</code></pre>
+    return CACHE_DICTION</code></pre>
 <p>I hope this code isn’t too ugly :) I’m definitely still working on making my code efficient and nice looking.</p>
 
       </article>
@@ -351,7 +341,7 @@ def get_eventbrite_cache(search_params, CACHE_FNAME, force_download=False):
           
           
           &nbsp;&bull;&nbsp;
-          2017
+          2018
 
           
             &nbsp;&bull;&nbsp;

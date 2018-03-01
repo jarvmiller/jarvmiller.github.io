@@ -68,6 +68,24 @@
     </item>
     
     <item>
+      <title>Pandas</title>
+      <link>/tags/pandas/</link>
+      <pubDate>Wed, 28 Feb 2018 00:00:00 +0000</pubDate>
+      <author>jarvm@umich.edu (Jarvis Miller)</author>
+      <guid>/tags/pandas/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Pydata</title>
+      <link>/tags/pydata/</link>
+      <pubDate>Wed, 28 Feb 2018 00:00:00 +0000</pubDate>
+      <author>jarvm@umich.edu (Jarvis Miller)</author>
+      <guid>/tags/pydata/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Python</title>
       <link>/tags/python/</link>
       <pubDate>Thu, 28 Dec 2017 00:00:00 +0000</pubDate>
@@ -82,6 +100,15 @@
       <pubDate>Thu, 17 Aug 2017 00:00:00 +0000</pubDate>
       <author>jarvm@umich.edu (Jarvis Miller)</author>
       <guid>/tags/r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Rstats</title>
+      <link>/tags/rstats/</link>
+      <pubDate>Wed, 28 Feb 2018 00:00:00 +0000</pubDate>
+      <author>jarvm@umich.edu (Jarvis Miller)</author>
+      <guid>/tags/rstats/</guid>
       <description></description>
     </item>
     

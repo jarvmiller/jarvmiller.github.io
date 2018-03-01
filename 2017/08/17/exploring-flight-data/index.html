@@ -203,13 +203,13 @@ Figure 1: Differences between largest and second largest cause of delay for each
 <pre class="r"><code># Imbalanced classes in training data
 region_train %&gt;% select(max_delay) %&gt;% count(max_delay) %&gt;% mutate(perc = n / sum(n) * 100)</code></pre>
 <pre><code>## # A tibble: 5 x 3
-##   max_delay     n       perc
-##      &lt;fctr&gt; &lt;int&gt;      &lt;dbl&gt;
-## 1  aircraft   108  0.1579201
-## 2   carrier 26366 38.5529837
-## 3       nas  2273  3.3236339
-## 4  security 21704 31.7360979
-## 5   weather 17938 26.2293644</code></pre>
+##   max_delay     n   perc
+##   &lt;fct&gt;     &lt;int&gt;  &lt;dbl&gt;
+## 1 aircraft    108  0.158
+## 2 carrier   26366 38.6  
+## 3 nas        2273  3.32 
+## 4 security  21704 31.7  
+## 5 weather   17938 26.2</code></pre>
 <div id="model" class="section level3">
 <h3>Model</h3>
 <p>Below includes a table with training and testing error for each parameter combination. Training data was 70% of the original data with 68,398 rows while the testing had 29,310 rows. Recall that I had two datasets, one which included an indicator for each origin and departure state (111 predictors total), which the other had an indicator for each origin and departure region (15 predictors total). When implementing RF without tuning, the MSE for the region data was around .33 while the state data was about .32. Because training with state indicators takes a much longer time, I chose to forgo tuning on that data due to the time constraint. Thus, any remaining analysis is done with the region data.</p>
@@ -301,7 +301,7 @@ Figure 3: Variable importance
           
           
           &nbsp;&bull;&nbsp;
-          2017
+          2018
 
           
             &nbsp;&bull;&nbsp;
