@@ -8,10 +8,19 @@
     <language>en-us</language>
     <managingEditor>jarvm@umich.edu (Jarvis Miller)</managingEditor>
     <webMaster>jarvm@umich.edu (Jarvis Miller)</webMaster>
-    <lastBuildDate>Wed, 28 Feb 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 01 Jun 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/pydata/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Amen, Brother</title>
+      <link>/2018/06/01/amen-brother/</link>
+      <pubDate>Fri, 01 Jun 2018 00:00:00 +0000</pubDate>
+      <author>jarvm@umich.edu (Jarvis Miller)</author>
+      <guid>/2018/06/01/amen-brother/</guid>
+      <description>I recently listened to a podcast that talked about 1960s track titled “Amen, Brother” by The Winstons. It is the most-sampled track ever based on whosampled.com. Here is a link to a particular part of the song, the 6 second drum solo known as the Amen Break that is the reason for the 2800+ samples heard in Hip-Hop, EDM, the Futurama intro, etc. I wanted to see who were the type of artists sampling this song and how did they use the sample.</description>
+    </item>
     
     <item>
       <title>Dplyr &lt;-&gt; Pandas</title>
