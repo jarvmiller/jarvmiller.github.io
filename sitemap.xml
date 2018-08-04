@@ -91,26 +91,26 @@
   </url>
   
   <url>
-    <loc>/tags/gsoc/</loc>
-    <lastmod>2017-06-23T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>/categories/gsoc/</loc>
     <lastmod>2017-06-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/tags/ml/</loc>
-    <lastmod>2017-11-09T00:00:00+00:00</lastmod>
+    <loc>/tags/gsoc/</loc>
+    <lastmod>2017-06-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/categories/ml/</loc>
     <lastmod>2017-10-14T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/ml/</loc>
+    <lastmod>2017-11-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -145,13 +145,13 @@
   </url>
   
   <url>
-    <loc>/tags/python/</loc>
+    <loc>/categories/python/</loc>
     <lastmod>2017-12-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/categories/python/</loc>
+    <loc>/tags/python/</loc>
     <lastmod>2017-12-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
